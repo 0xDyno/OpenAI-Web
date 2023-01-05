@@ -1,5 +1,4 @@
 from django.shortcuts import render
-from django.http import HttpResponse
 
 # Create your views here.
 
@@ -9,8 +8,8 @@ def intro(request):
 
 
 def chat_gpt_page(request):
-    return HttpResponse("Talk with ChatGPT")
+    return render(request=request, template_name="chat_gpt.html")
 
 
 def generate_page(request):
-    return HttpResponse("Generate image")
+    return render(request=request, template_name="generate.html")

@@ -11,10 +11,13 @@ h1 {
   font-size: 3em; /* 3 times the size of the base font */
 }
 
-.links {
-  /*display: inline-block;*/
-  /*float: right;*/
-  font-size: 1.5em; /* 1.5 times the size of the base font */
+form {
+  margin-top: 20px;
+}
+
+textarea {
+  width: 50%; /* 75% of the width of the containing element */
+  font-size: 1.2em; /* 1.2 times the size of the base font */
 }
 
 a {
@@ -35,8 +38,52 @@ table {
 
 td {
   text-align: center;
-  padding: 10px;
+  padding: 5px;
+  width: 500px;
   background-color: #d0eaf3; /* light blue color */
+}
+
+input[type="submit"] {
+  margin-top: 10px;
+  font-size: 1.2em; /* 1.2 times the size of the base font */
+}
+
+.links {
+  /*display: inline-block;*/
+  /*float: right;*/
+  font-size: 1.3em; /* 1.5 times the size of the base font */
+}
+
+.conversation {
+  margin: 20px auto;
+  background: #fff5d5;
+  width: 75%;
+  padding: 10px;
+  overflow-y: scroll; /* add scrollbars if necessary */
+}
+
+.image {
+  margin: 20px auto;
+  width: 50%; /* 75% of the width of the containing element */
+  padding: 10px;
+}
+
+#generated-image {
+  width: 100%; /* 100% of the width of the containing element */
+}
+
+.gallery {
+  margin: 20px auto;
+  width: 75%; /* 75% of the width of the containing element */
+  background: #fff5d5;
+  padding: 10px;
+  overflow-y: scroll; /* add scrollbars if necessary */
+}
+
+.gallery img {
+  width: 200px; /* 200 pixels */
+  height: 200px; /* 200 pixels */
+  margin: 10px;
 }
 
 .footer {
