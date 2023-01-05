@@ -1,0 +1,48 @@
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  background-color: #f5ede5; /* white background */
+}
+
+h1 {
+  /*display: inline-block;*/
+  text-align: center;
+  color: #f6a281; /* light salmon color */
+  font-size: 3em; /* 3 times the size of the base font */
+}
+
+.links {
+  /*display: inline-block;*/
+  /*float: right;*/
+  font-size: 1.5em; /* 1.5 times the size of the base font */
+}
+
+a {
+  color: #0000ff; /* blue color */
+  text-decoration: none;
+}
+
+a:hover {
+  color: #ff0000; /* red color */
+}
+
+table {
+  border-collapse: collapse;
+  margin: 0 auto;
+  border: 2px solid #93bff8; /* blue border */
+  width: 75%; /* 75% of the width of the containing element */
+}
+
+td {
+  text-align: center;
+  padding: 10px;
+  background-color: #d0eaf3; /* light blue color */
+}
+
+.footer {
+  font-size: 0.8em;
+  text-align: center;
+  margin-top: 20px;
+  border-top: 1px solid #cccccc; /* light grey color */
+  padding-top: 20px;
+}
