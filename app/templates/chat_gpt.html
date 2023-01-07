@@ -1,31 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>ChatGPT</title>
-    {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static "web.css" %}">
-</head>
-<body>
-    <h1>My Creative Page</h1>
-    <div class="links">
-        <a href="#">Main Page</a> |
-        <a href="#">ChatGPT</a> |
-        <a href="#">DALL-E</a>
-    </div>
+{% extends "main.html" %}
 
-    <form action="#" method="POST">
-        <textarea name="request" rows="10" cols="10" placeholder="Enter your request here"></textarea>
-        <br>
-        <input type="submit" value="Send">
-    </form>
+{% block content %}
 
-    <div class="conversation">
-        <div id="conversation-history">
-            <p><strong>User:</strong> Hello, ChatGPT! How are you today?</p>
-            <p><strong>ChatGPT:</strong> Hi! I'm just a computer program, so I don't have feelings or emotions. I'm always ready to help you with any questions you have.</p>
-        </div>
+<form action="#" method="POST">
+    {% csrf_token %}
+    <textarea name="request" rows="10" cols="10" placeholder="Enter your request here"></textarea>
+    <br>
+    <input type="submit" value="Send">
+</form>
+
+<div class="conversation">
+    <div id="conversation-history">
+        {{ answer }}
     </div>
-    <div class="footer">Copyright &copy; 2023</div>
-</body>
-</html>
+</div>
+
+{% endblock %}

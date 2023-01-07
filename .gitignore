@@ -1,5 +1,6 @@
 # Added
 /.idea
+test.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -105,7 +106,7 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
+OpenAI_Web/.env
 .venv
 env/
 venv/

@@ -1,33 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static "web.css" %}">
-</head>
+{% extends "main.html" %}
 
-<body>
-    <h1>My Creative Page</h1>
-    <div class="links">
-        <a href="#">Main Page</a> |
-        <a href="#">ChatGPT</a> |
-        <a href="#">DALL-E</a>
-    </div>
+{% block content %}
 
-    <form action="#" method="POST">
-        <textarea name="request" rows="10" cols="10" placeholder="Enter your request here"></textarea>
-        <br>
-        <input type="submit" value="Generate">
-    </form>
+<form action="#" method="POST">
+    {% csrf_token %}
+    <textarea name="request" rows="10" cols="10" placeholder="Enter your request here"></textarea>
+    <br>
+    <input type="submit" value="Generate">
+</form>
 
-    <div class="image">
-        <img id="generated-image" src="#" alt="Generated image">
-    </div>
+<div class="image">
+    <img id="generated-image" src="#" alt="Generated image">
+</div>
 
-    <div class="gallery">
-        <div id="image-history"></div>
-    </div>
+<div class="gallery">
+    <div id="image-history"></div>
+</div>
 
-    <div class="footer">Copyright &copy; 2023</div>
-</body>
-</html>
+{% endblock %}

@@ -1,0 +1,21 @@
+<div class="navigator">
+    <h1>{{ title }}</h1>
+    <div class="links">
+        <table style="margin: auto">
+            <tr>
+                <td style="width: 100pt;">
+                    <a href="{% url "home" %}">Main Page</a>
+                </td>
+                <td style="width: 100pt;">
+                    <a href="{% url "chat" %}">ChatGPT</a>
+                </td>
+                <td style="width: 100pt;">
+                    <a href="{% url "generate" %}">DALL-E</a>
+                </td>
+                <td style="width: 100pt;">
+                    <a href="{% url "magic" %}">Magic</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
