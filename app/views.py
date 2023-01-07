@@ -1,37 +1,43 @@
 from django.shortcuts import render
-
+from . import forms
+from . import models
 # Create your views here.
 
-context = {
-    "title": "AI Interface",
-}
 
 
 def intro(request):
-    return render(request=request, template_name="home.html", context=context)
+    return render(request=request, template_name="home.html")
 
 
 def chat_gpt_page(request):
-    context_gpt = context.copy()
+    form = forms.ChatGPTForm()
+    context = {"form": form}
+    
     if request.method == "POST":
-        context_gpt["answer"] = "something"
+        form = forms.ChatGPTForm(request.POST)
+        if form.is_valid():
+            user_request = form.data["request"]
+            model = form.data["model"]
+            temperature = form.data["temperature"]
+            
+            response = models.get_gpt_respond(user_request, model, temperature)
+            context = {"answer": response, "user_request": user_request}
         
-    return render(request=request, template_name="chat_gpt.html", context=context_gpt)
+    return render(request=request, template_name="chat_gpt.html", context=context)
 
 
 def generate_page(request):
-    return render(request=request, template_name="generate.html", context=context)
+    return render(request=request, template_name="generate.html")
 
 
 def magics_page(request):
-    return render(request=request, template_name="magic.html", context=context)
+    return render(request=request, template_name="magic.html")
 
 
 def magics_item_page(request, pk):
     if pk > 100:
-        mip_context = {"message": "404. Not Found"}
+        context = {"message": "404. Not Found"}
     else:
-        mip_context = {"message": "Magic things happens here.."}
+        context = {"message": "Magic things happens here.."}
         
-    mip_context.update(context)
-    return render(request=request, template_name="magic_item.html", context=mip_context)
+    return render(request=request, template_name="magic_item.html", context=context)

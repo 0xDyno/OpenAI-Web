@@ -13,6 +13,7 @@ h1 {
 
 table {
   text-align: center;
+  margin: 0 auto;
 }
 
 form {
@@ -46,6 +47,7 @@ input[type="submit"] {
 }
 
 .conversation {
+  text-align: left;
   margin: 20px auto;
   background: #fff5d5;
   width: 75%;
@@ -92,7 +94,6 @@ input[type="submit"] {
 
 .table-home {
   border-collapse: collapse;
-  margin: 0 auto;
   border: 2px solid #93bff8; /* blue border */
   width: 75%; /* 75% of the width of the containing element */
 }
@@ -101,4 +102,13 @@ input[type="submit"] {
   padding: 5px;
   width: 500px;
   background-color: #d0eaf3; /* light blue color */
+}
+
+.table-models {
+  border-collapse: collapse;
+  width: 75%; /* 75% of the width of the containing element */
+}
+
+.td-models {
+  padding: 5px;
 }

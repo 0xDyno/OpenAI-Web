@@ -1,18 +1,68 @@
 {% extends "main.html" %}
 
 {% block content %}
+    <br>
+<table class="table-models">
+  <tr>
+    <td class="td-models">Davinci</td>
+    <td class="td-models">Curie</td>
+    <td class="td-models">Babbage</td>
+    <td class="td-models">Ada</td>
+  </tr>
+  <tr>
+    <td class="td-models">Complex intent, cause and effect, summarization for audience</td>
+    <td class="td-models">Language translation, complex classification, summarization</td>
+    <td class="td-models">Moderate classification, semantic search classification</td>
+    <td class="td-models">Parsing text, simple classification, address correction, keywords</td>
+  </tr>
+</table>
 
-<form action="#" method="POST">
+
+<form action="{% url "chat" %}" method="POST">
     {% csrf_token %}
-    <textarea name="request" rows="10" cols="10" placeholder="Enter your request here"></textarea>
+    {{ form }}
+
+    <input type="radio" id="checkbox1" name="model" value="text-davinci-003" checked>
+    <label for="checkbox1">text-davinci-003</label>
+
+    <input type="radio" id="checkbox2" name="model" value="text-curie-001">
+    <label for="checkbox2">text-curie-001</label>
+
+    <input type="radio" id="checkbox3" name="model" value="text-babbage-001">
+    <label for="checkbox3">text-babbage-001</label>
+
+    <input type="radio" id="checkbox4" name="model" value="text-ada-001">
+    <label for="checkbox4">text-ada-001</label>
+
+    <br>
+    <br>
+
+    <input type="radio" id="checkbox5" name="temperature" value="1" checked>
+    <label for="checkbox5">1</label>
+
+    <input type="radio" id="checkbox6" name="temperature" value="0.6">
+    <label for="checkbox6">0.2</label>
+
+    <input type="radio" id="checkbox7" name="temperature" value="0.3">
+    <label for="checkbox7">0.3</label>
+
+    <input type="radio" id="checkbox8" name="temperature" value="0">
+    <label for="checkbox8">0</label>
+
+    <br>
+    <br>
+
+    <textarea style="padding-top: 10px" name="request" rows="10" cols="10" placeholder="Enter your request here">{{ user_request }}</textarea>
     <br>
     <input type="submit" value="Send">
 </form>
 
-<div class="conversation">
-    <div id="conversation-history">
-        {{ answer }}
-    </div>
+{% if answer %}
+    <div class="conversation">
+    {% for line in answer.pop %}
+        <p>{{ line }}</p>
+    {% endfor %}
 </div>
+{% endif %}
 
 {% endblock %}
