@@ -1,114 +1,118 @@
 body {
-  font-family: Arial, sans-serif;
-  text-align: center;
-  background-color: #f5ede5; /* white background */
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #f5ede5; /* white background */
 }
 
 h1 {
   /*display: inline-block;*/
-  text-align: center;
-  color: #f6a281; /* light salmon color */
-  font-size: 3em; /* 3 times the size of the base font */
+    text-align: center;
+    color: #f6a281; /* light salmon color */
+    font-size: 3em; /* 3 times the size of the base font */
 }
 
 table {
-  text-align: center;
-  margin: 0 auto;
+    text-align: center;
+    margin: 0 auto;
 }
 
 form {
-  margin-top: 20px;
+    margin-top: 20px;
 }
 
 textarea {
-  width: 50%; /* 75% of the width of the containing element */
-  font-size: 1.2em; /* 1.2 times the size of the base font */
-  text-align: center;
+    width: 50%; /* 75% of the width of the containing element */
+    font-size: 1.2em; /* 1.2 times the size of the base font */
+    text-align: center;
 }
 
 a {
-  color: #0000ff; /* blue color */
-  text-decoration: none;
+    color: #0000ff; /* blue color */
+    text-decoration: none;
 }
 
 a:hover {
-  color: #ff0000; /* red color */
+    color: #ff0000; /* red color */
 }
 
 input[type="submit"] {
-  margin-top: 10px;
-  font-size: 1.2em; /* 1.2 times the size of the base font */
+    margin-top: 10px;
+    font-size: 1.2em; /* 1.2 times the size of the base font */
 }
 
 .links {
   /*display: inline-block;*/
   /*float: right;*/
-  font-size: 1.2em; /* 1.5 times the size of the base font */
+    font-size: 1.2em; /* 1.5 times the size of the base font */
 }
 
 .conversation {
-  text-align: left;
-  margin: 20px auto;
-  background: #fff5d5;
-  width: 75%;
-  padding: 10px;
-  overflow-y: scroll; /* add scrollbars if necessary */
+    text-align: left;
+    margin: 20px auto;
+    background: #fff5d5;
+    width: 75%;
+    padding: 10px;
+    overflow-y: scroll; /* add scrollbars if necessary */
 }
 
 .image {
-  margin: 20px auto;
-  width: 50%; /* 75% of the width of the containing element */
-  padding: 10px;
+    margin: 20px auto;
+    width: 80%; /* 75% of the width of the containing element */
 }
 
 #generated-image {
-  width: 100%; /* 100% of the width of the containing element */
+    width: 100%; /* 100% of the width of the containing element */
 }
 
 .gallery {
-  margin: 20px auto;
-  width: 75%; /* 75% of the width of the containing element */
-  background: #fff5d5;
-  padding: 10px;
-  overflow-y: scroll; /* add scrollbars if necessary */
-}
-
-.gallery img {
-  width: 200px; /* 200 pixels */
-  height: 200px; /* 200 pixels */
-  margin: 10px;
+    margin: 20px auto;
+    width: 75%; /* 75% of the width of the containing element */
+    background: #fff5d5;
+    padding: 10px;
+    overflow-y: scroll; /* add scrollbars if necessary */
 }
 
 .footer {
-  font-size: 0.8em;
-  text-align: center;
-  margin-top: 20px;
-  border-top: 1px solid #cccccc; /* light grey color */
-  padding-top: 10px;
+    font-size: 0.8em;
+    text-align: center;
+    margin-top: 20px;
+    border-top: 1px solid #cccccc; /* light grey color */
+    padding-top: 10px;
 }
 
 .navigator {
-  border-bottom: 1px solid #cccccc; /* light grey color */
-  padding-bottom: 20px;
+    border-bottom: 1px solid #cccccc; /* light grey color */
+    padding-bottom: 20px;
 }
 
 .table-home {
-  border-collapse: collapse;
-  border: 2px solid #93bff8; /* blue border */
-  width: 75%; /* 75% of the width of the containing element */
+    border-collapse: collapse;
+    border: 2px solid #93bff8; /* blue border */
+    width: 75%; /* 75% of the width of the containing element */
 }
 
 .td-home {
-  padding: 5px;
-  width: 500px;
-  background-color: #d0eaf3; /* light blue color */
+    padding: 5px;
+    width: 500px;
+    background-color: #d0eaf3; /* light blue color */
 }
 
-.table-models {
-  border-collapse: collapse;
-  width: 75%; /* 75% of the width of the containing element */
+.td-model {
+    padding: 5px;
 }
 
-.td-models {
-  padding: 5px;
+.td-model-title {
+    padding-bottom: 30px;
+}
+
+.img-size {
+    width: 200px;
+    height: 200px;
+    padding: 10px;
+    border: 0;
+    transition: transform .2s; /* animate the zoom effect */
+}
+
+.zoom {
+transform: scale(3); /* increase the size of the image on hover */
 }

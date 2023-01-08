@@ -15,3 +15,7 @@ class ChatGPTForm(forms.Form):
     # choice = forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect)
     
     # text = forms.Textarea()
+
+
+class DalleForm(forms.Form):
+    pass

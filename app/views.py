@@ -16,18 +16,51 @@ def chat_gpt_page(request):
     if request.method == "POST":
         form = forms.ChatGPTForm(request.POST)
         if form.is_valid():
-            user_request = form.data["request"]
+            prompt = form.data["prompt"]
             model = form.data["model"]
             temperature = form.data["temperature"]
             
-            response = models.get_gpt_respond(user_request, model, temperature)
-            context = {"answer": response, "user_request": user_request}
+            response = models.get_answer(prompt, model, temperature)
+            context = {"answer": response, "prompt": prompt}
         
     return render(request=request, template_name="chat_gpt.html", context=context)
 
 
 def generate_page(request):
-    return render(request=request, template_name="generate.html")
+    form = forms.DalleForm()
+    context = {"form": form,
+               "amount": 1}
+    
+    saved_imgs = models.get_saved_imgs()
+    if saved_imgs:
+        context["gallery"] = saved_imgs
+        
+    if request.method == "POST":
+        form = forms.ChatGPTForm(request.POST)
+        if form.is_valid():
+            prompt = form.data["prompt"]
+            amount = form.data["amount"]
+            size = form.data["size"]
+
+            response = models.get_generated_imgs(prompt, int(amount), size)
+            context = {"generated": response, "prompt": prompt, "size": size, "amount": amount}
+    
+    return render(request=request, template_name="generate.html", context=context)
+
+
+def save_img(request, size, url):
+    models.save_image(url)
+    return intro(request)
+
+
+def generate_variation_page(request, size, url):
+    form = forms.ChatGPTForm()
+    context = {
+        "generated": models.variate_image(size, url),
+        "form": form,
+        "amount": 1,
+    }
+    return render(request=request, template_name="generate.html", context=context)
 
 
 def magics_page(request):

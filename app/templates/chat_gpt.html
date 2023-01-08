@@ -2,67 +2,89 @@
 
 {% block content %}
     <br>
-<table class="table-models">
-  <tr>
-    <td class="td-models">Davinci</td>
-    <td class="td-models">Curie</td>
-    <td class="td-models">Babbage</td>
-    <td class="td-models">Ada</td>
-  </tr>
-  <tr>
-    <td class="td-models">Complex intent, cause and effect, summarization for audience</td>
-    <td class="td-models">Language translation, complex classification, summarization</td>
-    <td class="td-models">Moderate classification, semantic search classification</td>
-    <td class="td-models">Parsing text, simple classification, address correction, keywords</td>
-  </tr>
-</table>
+    <table style="border-collapse: collapse; width: 1100px;">
+        <tr>
+            <td style="text-align: left; padding-bottom: 30px; width: 100px;">AI</td>
+            <td class="td-model-title">Davinci 03 +</td>
+            <td class="td-model-title">Davinci 02 +</td>
+            <td class="td-model-title">Curie</td>
+            <td class="td-model-title">Babbage</td>
+            <td class="td-model-title">Ada</td>
+        </tr>
+        <tr>
+            <td style="text-align: left; width: 100px;">Description</td>
+            <td class="td-model">The smartest here. Complex, humanized</td>
+            <td class="td-model">Good at translating natural language to code.</td>
+            <td class="td-model">A bit worse than Davinci but faster</td>
+            <td class="td-model">A bit better, than Ada, but still fast</td>
+            <td class="td-model">The Fastest - Weak. Parsing text, address correction</td>
+        </tr>
+        <tr>
+            <td style="text-align: left; width: 100px;">Tech</td>
+            <td class="td-model">Text, 4000 symbols</td>
+            <td class="td-model">Code, 8000 symbols</td>
+            <td class="td-model">Text, 1000 symbols</td>
+            <td class="td-model">Text, 1000 symbols</td>
+            <td class="td-model">Text, 1000 symbols</td>
+        </tr>
+    </table>
 
 
-<form action="{% url "chat" %}" method="POST">
-    {% csrf_token %}
-    {{ form }}
+    <form id="interact_form" method="POST" action="">
+        {% csrf_token %}
+        {{ form }}
 
-    <input type="radio" id="checkbox1" name="model" value="text-davinci-003" checked>
-    <label for="checkbox1">text-davinci-003</label>
+        <input type="radio" id="model1" name="model" value="text-davinci-003" checked>
+        <label for="model1">text-davinci-003</label> &nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;
 
-    <input type="radio" id="checkbox2" name="model" value="text-curie-001">
-    <label for="checkbox2">text-curie-001</label>
+        <input type="radio" id="model2" name="model" value="code-davinci-002">
+        <label for="model2">code-davinci-002</label> &nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;
 
-    <input type="radio" id="checkbox3" name="model" value="text-babbage-001">
-    <label for="checkbox3">text-babbage-001</label>
+        <input type="radio" id="model3" name="model" value="text-curie-001">
+        <label for="model3">text-curie-001</label> &nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;
 
-    <input type="radio" id="checkbox4" name="model" value="text-ada-001">
-    <label for="checkbox4">text-ada-001</label>
+        <input type="radio" id="model4" name="model" value="text-babbage-001">
+        <label for="model4">text-babbage-001</label> &nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;
 
-    <br>
-    <br>
+        <input type="radio" id="model5" name="model" value="text-ada-001">
+        <label for="model5">text-ada-001</label>
 
-    <input type="radio" id="checkbox5" name="temperature" value="1" checked>
-    <label for="checkbox5">1</label>
+        <br><br>
 
-    <input type="radio" id="checkbox6" name="temperature" value="0.6">
-    <label for="checkbox6">0.2</label>
+        <input type="radio" id="temperature1" name="temperature" value="1" checked>
+        <label for="temperature1">1</label>
 
-    <input type="radio" id="checkbox7" name="temperature" value="0.3">
-    <label for="checkbox7">0.3</label>
+        <input type="radio" id="temperature2" name="temperature" value="0.6">
+        <label for="temperature2">0.2</label>
 
-    <input type="radio" id="checkbox8" name="temperature" value="0">
-    <label for="checkbox8">0</label>
+        <input type="radio" id="temperature3" name="temperature" value="0.3">
+        <label for="temperature3">0.3</label>
 
-    <br>
-    <br>
+        <input type="radio" id="temperature4" name="temperature" value="0">
+        <label for="temperature4">0</label>
 
-    <textarea style="padding-top: 10px" name="request" rows="10" cols="10" placeholder="Enter your request here">{{ user_request }}</textarea>
-    <br>
-    <input type="submit" value="Send">
-</form>
+        <br><br>
 
-{% if answer %}
-    <div class="conversation">
-    {% for line in answer.pop %}
-        <p>{{ line }}</p>
-    {% endfor %}
-</div>
-{% endif %}
+        <textarea style="padding-top: 10px" name="prompt" rows="10" cols="10" placeholder="Enter your request here">{{ user_request }}</textarea>
+        <br>
+        <input type="submit" id="submitButton" value="Send" onclick="this.disabled=true; this.">
+    </form>
+
+    <script>
+        document.getElementById("interact_form").addEventListener("submit", function(event) {
+            event.preventDefault();
+            document.getElementById("submitButton").disabled = true;
+            this.submit();
+        });
+    </script>
+
+    {% if answer %}
+
+        <div class="conversation">
+            {% load static %}
+            {{ answer|linebreaks }}
+        </div>
+
+    {% endif %}
 
 {% endblock %}
