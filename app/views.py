@@ -10,16 +10,17 @@ def intro(request):
 
 
 def chat_gpt_page(request):
-    form = forms.ChatGPTForm()
-    context = {"form": form}
-    
-    if request.method == "POST":
+    if request.method != "POST":
+        form = forms.ChatGPTForm()
+        context = {"form": form}
+    else:
         form = forms.ChatGPTForm(request.POST)
+        context = {"form": form}
         if form.is_valid():
             prompt = form.data["prompt"]
             model = form.data["model"]
             temperature = form.data["temperature"]
-            
+        
             response = models.get_answer(prompt, model, temperature)
             context = {"answer": response, "prompt": prompt}
         
@@ -27,24 +28,25 @@ def chat_gpt_page(request):
 
 
 def generate_page(request):
-    form = forms.DalleForm()
-    context = {"form": form,
-               "amount": 1}
-    
-    saved_imgs = models.get_saved_imgs()
-    if saved_imgs:
-        context["gallery"] = saved_imgs
-        
-    if request.method == "POST":
+    if request.method != "POST":
+        form = forms.DalleForm()
+        context = {"form": form, "amount": 1}
+    else:
         form = forms.ChatGPTForm(request.POST)
+        context = {"form": form}
+    
         if form.is_valid():
             prompt = form.data["prompt"]
             amount = form.data["amount"]
             size = form.data["size"]
-
+        
             response = models.get_generated_imgs(prompt, int(amount), size)
             context = {"generated": response, "prompt": prompt, "size": size, "amount": amount}
-    
+
+    saved_imgs = models.get_saved_imgs()
+    if saved_imgs:
+        context["gallery"] = saved_imgs
+
     return render(request=request, template_name="generate.html", context=context)
 
 
@@ -64,7 +66,8 @@ def generate_variation_page(request, size, url):
 
 
 def magics_page(request):
-    return render(request=request, template_name="magic.html")
+    context = {"message": "Not ready yet. But magic is coming..."}
+    return render(request=request, template_name="magic.html", context=context)
 
 
 def magics_item_page(request, pk):
