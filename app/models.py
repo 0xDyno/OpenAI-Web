@@ -10,7 +10,7 @@ from openai.error import RateLimitError
 
 # Create your models here.
 env = environ.Env()
-env.read_env("OpenAI_Web/.env")
+env.read_env("AI_Interface/.env")
 ai.api_key = env("OPENAI_SECRET_KEY")
 
 

@@ -1,5 +1,5 @@
 """
-ASGI config for OpenAI_Web project.
+ASGI config for AI_Interface project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 
@@ -12,6 +12,6 @@ import os
 from django.core.asgi import get_asgi_application
 
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "OpenAI_Web.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "AI_Interface.settings")
 
 application = get_asgi_application()

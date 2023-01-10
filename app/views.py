@@ -77,7 +77,7 @@ def generate_variation_page(request, size, url):
     
     context = {
         "generated": models.variate_image(size, url),
-        "form": forms.DalleForm(initial=initial)
+        "form": forms.DalleForm(initial=initial),
     }
     return render(request=request, template_name="generate.html", context=context)
 

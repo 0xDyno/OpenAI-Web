@@ -1,5 +1,5 @@
 """
-WSGI config for OpenAI_Web project.
+WSGI config for AI_Interface project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "OpenAI_Web.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "AI_Interface.settings")
 
 application = get_wsgi_application()
