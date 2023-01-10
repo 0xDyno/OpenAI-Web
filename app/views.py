@@ -1,8 +1,12 @@
 from django.shortcuts import render
+from django.http import HttpResponseRedirect
 from . import forms
 from . import models
 # Create your views here.
 
+
+DEF_INITIAL_CHAT = {"model": forms.ChatGPTForm.MODELS[0], "accuracy": 100}
+DEF_INITIAL_IMGS = {"size": forms.DalleForm.SIZES[0], "amount": 1}
 
 
 def intro(request):
@@ -28,13 +32,12 @@ def chat_gpt_page(request):
                        }
             return render(request=request, template_name="chat_gpt.html", context=context)
         
-    form = forms.ChatGPTForm(initial={"model": forms.ChatGPTForm.MODELS[0],
-                                      "accuracy": 100})
+    form = forms.ChatGPTForm(initial=DEF_INITIAL_CHAT)
     context = {"form": form}
     return render(request=request, template_name="chat_gpt.html", context=context)
 
 
-def generate_page(request):
+def generate_page(request, add_to_context: dict = None):
     if request.method == "POST":
         form = forms.DalleForm(request.POST)
         print(f"\n\n\n{form.data} {form.is_valid()}\n\n\n")
@@ -43,7 +46,6 @@ def generate_page(request):
             prompt = form.cleaned_data["prompt"]
             amount = form.cleaned_data["amount"]
             size = form.cleaned_data["size"]
-        
             context = {"form": form,
                        "generated": models.get_generated_imgs(prompt, amount, size),
                        "prompt": prompt,
@@ -56,9 +58,9 @@ def generate_page(request):
         
             return render(request=request, template_name="generate.html", context=context)
         
-    form = forms.DalleForm(initial={"size": forms.DalleForm.SIZES[0],
-                           "amount": 1})
-    context = {"form": form}
+    context = {"form": forms.DalleForm(DEF_INITIAL_IMGS)}
+    if add_to_context is not None:
+        context.update(add_to_context)
     
     saved_imgs = models.get_saved_imgs()
     if saved_imgs:
@@ -67,17 +69,19 @@ def generate_page(request):
     return render(request=request, template_name="generate.html", context=context)
 
 
-def save_img(request, size, url):
-    models.save_image(url)
-    return intro(request)
+def generate_variation_page(request, url):
+    return render(request=request, template_name="variate.html",
+                  context={"generated": models.variate_image(url)})
 
 
-def generate_variation_page(request, size, url):
-    initial = {"size": forms.DalleForm.SIZES[0], "amount": 1}
-    
+def save_img(request, url):
+    return render(request=request, template_name="save.html", context={"url": url})
+
+
+def increase_page(request, url):
     context = {
-        "generated": models.variate_image(size, url),
-        "form": forms.DalleForm(initial=initial),
+        "generated": ["Here should be 1 increased photo, full size etc"],
+        "form": forms.DalleForm(DEF_INITIAL_IMGS),
     }
     return render(request=request, template_name="generate.html", context=context)
 

@@ -3,10 +3,8 @@
 {% block content %}
 
     <br>
-    <form action="" method="post" id="generateForm">
+    <form action="{% url "generate" %}" method="post" id="generateForm">
         {% csrf_token %}
-        <input type="hidden" name="generate" value="generate">
-
         <table class="generate">
             <tr>
                 <td class="title">
@@ -28,11 +26,17 @@
             </tr>
         </table>
 
-        <br><br>
-        <textarea name="prompt" rows="10" cols="10" placeholder="Enter your request here">{{ prompt }}</textarea>
-        <br>
-        <input type="submit" id="submitButton" value="Generate">
+        <div class="default-padding">
+            {{ form.prompt }}
+        </div>
+
+        <input type="submit" id="submitButton" class="main" value="Generate">
+
+        {% include "images_generated.html" %}
     </form>
+
+    {% include "images_saved.html" %}
+
 
     <script>
         document.getElementById("generateForm").addEventListener("submit", function (event) {
@@ -41,41 +45,5 @@
             this.submit();
         });
     </script>
-
-    {% if generated %}
-        {% if "http" not in generated.0 %}
-            <p>{{ generated.0 }}</p>
-        {% else %}
-            <div class="image">
-                {% for url in generated %}
-                    <table class="generated-images">
-                        <tr>
-                            <th colspan="2">
-                                <img src="{{ url }}" class="size" alt="generated image" id="img"
-                                     onclick="this.classList.toggle('zoom');">
-                            </th>
-                        </tr>
-                        <tr>
-                            <td class="links">
-                                <a href="{% url "variate" "small" url %}">More (s)</a>
-                            </td>
-                            <td class="links">
-                                <a href="{% url "variate" "big" url %}">More (b)</a>
-                            </td>
-                        </tr>
-                    </table>
-                {% endfor %}
-            </div>
-        {% endif %}
-    {% endif %}
-
-    {% if gallery %}
-        <p style="font-size: 20px">Saved Images:</p>
-        <div class="gallery">
-            {% for image in gallery %}
-                <div id="image-history">{{ image }}</div>
-            {% endfor %}
-        </div>
-    {% endif %}
 
 {% endblock %}

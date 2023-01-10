@@ -3,13 +3,14 @@ from . import views
 
 
 urlpatterns = [
-    path("", views.intro, name="home"),
-    path("chat/", views.chat_gpt_page, name="chat"),
+    path(r"", views.intro, name="home"),
+    path(r"chat/", views.chat_gpt_page, name="chat"),
     
-    path("generate/", views.generate_page, name="generate"),
-    path("generate/save/<str:size>/<path:url>/", views.save_img, name="save"),
-    path("generate/variate/<str:size>/<path:url>/", views.generate_variation_page, name="variate"),
+    path(r"generate/", views.generate_page, name="generate"),
+    path(r"generate/variate/<path:url>", views.generate_variation_page, name="variate"),
+    path(r"generate/save/<path:url>", views.save_img, name="save"),
+    path(r"generate/increase/<path:url>", views.increase_page, name="increase"),
     
-    path("magic/", views.magics_page, name="magic"),
-    path("magic/<int:pk>/", views.magics_item_page, name="magic_item"),
+    path(r"magic/", views.magics_page, name="magic"),
+    path(r"magic/<int:pk>/", views.magics_item_page, name="magic_item"),
 ]

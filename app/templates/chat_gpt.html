@@ -30,7 +30,7 @@
     </table>
     <br>
 
-    <form action="#aiTable" method="post" id="interact_form">
+    <form action="{% url "chat" %}" method="post" id="interact_form">
         {% csrf_token %}
 
         {# I was searching for this *** decision for *** 3 days using tons of *** code on Google and ChatGPT AI #}
@@ -50,9 +50,7 @@
             {{ form.prompt }}
         </div>
 
-        <br> <br>
-
-        <input type="submit" name="submitButton" id="submitButton" value="Send">
+        <input type="submit" class="main" name="submitButton" id="submitButton" value="Send">
     </form>
 
     {% if response %}

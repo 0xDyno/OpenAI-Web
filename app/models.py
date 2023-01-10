@@ -1,12 +1,16 @@
 import os
 import random
+from time import sleep
 
 from django.db import models
-import openai as ai
 import environ
 import requests
+from django.http import FileResponse
+
+import openai as ai
 from openai import InvalidRequestError
 from openai.error import RateLimitError
+from openai.error import APIConnectionError
 
 # Create your models here.
 env = environ.Env()
@@ -30,7 +34,9 @@ def get_answer(prompt, model, temp) -> list:
         response = ai.Completion.create(model=model, prompt=prompt,
                                         temperature=temp, max_tokens=max_tokens)
         string = response.choices[0].text
-    except (InvalidRequestError, RateLimitError) as error:
+    except (ai.InvalidRequestError, ai.error.RateLimitError) as error:
+        string = f"Error: {error.error['message']}"
+    except ai.error.APIConnectionError as error:
         string = f"Error: {error.error['message']}"
 
     return string
@@ -49,27 +55,27 @@ def get_generated_imgs(prompt, number, size):
 
     number = 1 if number < 1 or number > 10 else number
 
-    from openai import InvalidRequestError
     try:
         response = ai.Image.create(prompt=prompt, n=number, size=size)
-    except (InvalidRequestError, RateLimitError) as error:
+    except (ai.InvalidRequestError, ai.error.RateLimitError) as error:
         return [error.error["message"]]
+    except ai.error.APIConnectionError as error:
+        return [error.error['message']]
 
     urls = [data["url"] for data in response['data']]
     return urls
 
 
-def save_image(url):
-    pass
-
-
-def variate_image(size, url):
+def variate_image(url):
     image = requests.request(url=url, method="GET").content
-    size = "1024x1024" if size == "big" else "256x256"
+    size = "256x256"
+    
     try:
         response = ai.Image.create_variation(image=image, n=5, size=size)
-    except (InvalidRequestError, RateLimitError) as error:
+    except (ai.InvalidRequestError, ai.error.RateLimitError) as error:
         return [error.error["message"]]
+    except ai.error.APIConnectionError as error:
+        return [error.error['message']]
     
     urls = [data["url"] for data in response['data']]
     return urls

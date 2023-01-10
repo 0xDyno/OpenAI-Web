@@ -1,0 +1,35 @@
+{% if generated %}
+    {% if "http" not in generated.0 %}
+        <p>{{ generated.0 }}</p>
+    {% else %}
+        <div class="image">
+            {% for url in generated %}
+                <table class="generated-images" id="action_buttons">
+                    <tr>
+                        <th colspan="3">
+                            <img src="{{ url }}" class="size" alt="generated image" id="img"
+                                 onclick="this.classList.toggle('zoom');">
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="{% url "variate" url %}" target="_blank">
+                                <input type="button" class="secondary" value="Variate">
+                            </a>
+                        </td>
+                        <td>
+                            <a href="{% url "save" url %}" target="_blank">
+                                <input type="button" class="secondary" value="Save">
+                            </a>
+                        </td>
+                        <td>
+                            <a href="{% url "increase" url %}" target="_blank">
+                                <input type="button" class="secondary" value="Increase">
+                            </a>
+                        </td>
+                    </tr>
+                </table>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endif %}

@@ -1,0 +1,8 @@
+{% if gallery %}
+    <p style="font-size: 20px">Saved Images:</p>
+    <div class="gallery">
+        {% for image in gallery %}
+            <div id="image-history">{{ image }}</div>
+        {% endfor %}
+    </div>
+{% endif %}
