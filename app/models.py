@@ -81,5 +81,10 @@ def variate_image(url):
     return urls
 
 
+def increase_image_resolution(url: str):
+    return "Here should be 1 increased photo, full size for:\n{}\n " \
+           "But it's not ready, sorry..".format(url)
+
+
 def get_saved_imgs():
     return list()

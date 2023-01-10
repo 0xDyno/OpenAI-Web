@@ -6,7 +6,7 @@ from . import models
 
 
 DEF_INITIAL_CHAT = {"model": forms.ChatGPTForm.MODELS[0], "accuracy": 100}
-DEF_INITIAL_IMGS = {"size": forms.DalleForm.SIZES[0], "amount": 1}
+DEF_INITIAL_IMGS = {"size": forms.DalleForm.SIZES[2], "amount": 1}
 
 
 def intro(request):
@@ -79,11 +79,8 @@ def save_img(request, url):
 
 
 def increase_page(request, url):
-    context = {
-        "generated": ["Here should be 1 increased photo, full size etc"],
-        "form": forms.DalleForm(DEF_INITIAL_IMGS),
-    }
-    return render(request=request, template_name="generate.html", context=context)
+    return render(request=request, template_name="image_increase_resolution.html",
+                  context={"result": models.increase_image_resolution(url)})
 
 
 def magics_page(request):
