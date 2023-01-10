@@ -56,7 +56,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "OpenAI_Web.urls"
+ROOT_URLCONF = "AI_Interface.urls"
 
 TEMPLATES = [
     {
