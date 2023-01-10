@@ -16,11 +16,59 @@ table {
     margin: 0 auto;
 }
 
-form {
-    margin-top: 20px;
+table.home {
+    border-collapse: collapse;
+    border: 2px solid #93bff8; /* blue border */
+    width: 75%; /* 75% of the width of the containing element */
+}
+
+table.home td {
+    padding: 5px;
+    width: 500px;
+    background-color: #d0eaf3; /* light blue color */
+}
+
+table.models {
+    border-collapse: collapse;
+    width: 1100px;
+}
+
+table.models td.title {
+    padding-bottom: 30px;
+}
+
+table.models td.model {
+    padding: 5px;
+}
+
+table.generate {
+    width: 50%
+}
+
+table.generate td.title {
+    text-align: center;
+    padding: 10px;
+    width: 50%;
+}
+
+table.generate td.field {
+    text-align: center;
+}
+
+table.generated-images {
+    display: inline-block;
+}
+
+table.generated-images td.links {
+    width: 50%
+}
+
+input.generate-amount {
+    width: 50px;
 }
 
 textarea {
+    padding-top: 10px;
     width: 50%; /* 75% of the width of the containing element */
     font-size: 1.2em; /* 1.2 times the size of the base font */
     text-align: center;
@@ -43,7 +91,7 @@ input[type="submit"] {
 .links {
   /*display: inline-block;*/
   /*float: right;*/
-    font-size: 1.2em; /* 1.5 times the size of the base font */
+    font-size: 1em;
 }
 
 .conversation {
@@ -58,10 +106,6 @@ input[type="submit"] {
 .image {
     margin: 20px auto;
     width: 80%; /* 75% of the width of the containing element */
-}
-
-#generated-image {
-    width: 100%; /* 100% of the width of the containing element */
 }
 
 .gallery {
@@ -85,27 +129,7 @@ input[type="submit"] {
     padding-bottom: 20px;
 }
 
-.table-home {
-    border-collapse: collapse;
-    border: 2px solid #93bff8; /* blue border */
-    width: 75%; /* 75% of the width of the containing element */
-}
-
-.td-home {
-    padding: 5px;
-    width: 500px;
-    background-color: #d0eaf3; /* light blue color */
-}
-
-.td-model {
-    padding: 5px;
-}
-
-.td-model-title {
-    padding-bottom: 30px;
-}
-
-.img-size {
+img.size {
     width: 200px;
     height: 200px;
     padding: 10px;
@@ -113,6 +137,11 @@ input[type="submit"] {
     transition: transform .2s; /* animate the zoom effect */
 }
 
-.zoom {
-transform: scale(3); /* increase the size of the image on hover */
+.default-padding {
+    padding: 7px;
+}
+
+.default-indent {
+    margin-inline: 5px;
+    margin-left: 20px;
 }

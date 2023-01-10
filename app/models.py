@@ -15,13 +15,10 @@ ai.api_key = env("OPENAI_SECRET_KEY")
 
 
 def get_answer(prompt, model, temp) -> list:
-    try:
-        temp = int(temp)
-    except TypeError:
-        temp = 1
-    else:
-        temp = 1 if temp < 0 or temp > 1 else temp
-        
+    temp = 100 if temp > 100 else temp
+    temp = 0 if temp < 0 else temp
+    temp = temp / 100
+    
     if model == env("DAVINCI3"):
         max_tokens = 4000
     elif model == env("DAVINCI2"):
@@ -42,13 +39,13 @@ def get_answer(prompt, model, temp) -> list:
 def get_generated_imgs(prompt, number, size):
     match size:
         case "1":
-            size = "256x256"
+            size = "1024x1024"
         case "2":
             size = "512x512"
         case "3":
-            size = "1024x1024"
-        case "_":
             size = "256x256"
+        case "_":
+            size = "1024x1024"
 
     number = 1 if number < 1 or number > 10 else number
 

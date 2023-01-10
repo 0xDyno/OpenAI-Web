@@ -2,31 +2,28 @@
 
 {% block content %}
 
-    <form action="{% url "generate" %}" method="POST" name="generateForm" id="generateForm">
+    <br>
+    <form action="" method="post" id="generateForm">
         {% csrf_token %}
+        <input type="hidden" name="generate" value="generate">
 
-        <table style="width: 50%">
+        <table class="generate">
             <tr>
-                <td style="text-align: center; width: 50%;">
-                    <p>Size:</p>
+                <td class="title">
+                    {{ form.size.label }}
                 </td>
-                <td style="text-align: center; width: 50%;">
-                    <label for="amount">Amount</label>:
+                <td class="title">
+                    {{ form.amount.label }}
                 </td>
             </tr>
             <tr>
-                <td style="text-align: center">
-                    <input type="radio" id="size1" name="size" value="1" checked>
-                    <label for="size1">256x256</label>
-
-                    <input type="radio" id="size2" name="size" value="2">
-                    <label for="size2">512x512</label>
-
-                    <input type="radio" id="size3" name="size" value="3">
-                    <label for="size3">1024x1024</label>
+                <td class="field">
+                    {% for size in form.size %}
+                        {{ size }}
+                    {% endfor %}
                 </td>
-                <td style="text-align: center">
-                    <input style="width: 50px" name="amount" type="number" id="amount" max="10" min="1" value="{{ amount }}">
+                <td class="field">
+                    {{ form.amount }}
                 </td>
             </tr>
         </table>
@@ -38,11 +35,11 @@
     </form>
 
     <script>
-    document.getElementById("generateForm").addEventListener("submit", function(event) {
-        event.preventDefault();
-        document.getElementById("submitButton").disabled = true;
-        this.submit();
-    });
+        document.getElementById("generateForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+            document.getElementById("submitButton").disabled = true;
+            this.submit();
+        });
     </script>
 
     {% if generated %}
@@ -51,18 +48,18 @@
         {% else %}
             <div class="image">
                 {% for url in generated %}
-                    <table style="display: inline-block;">
+                    <table class="generated-images">
                         <tr>
                             <th colspan="2">
-                                <img src="{{ url }}" class="img-size" alt="generated image" id="img"
+                                <img src="{{ url }}" class="size" alt="generated image" id="img"
                                      onclick="this.classList.toggle('zoom');">
                             </th>
                         </tr>
                         <tr>
-                            <td width="50%">
+                            <td class="links">
                                 <a href="{% url "variate" "small" url %}">More (s)</a>
                             </td>
-                            <td width="50%">
+                            <td class="links">
                                 <a href="{% url "variate" "big" url %}">More (b)</a>
                             </td>
                         </tr>

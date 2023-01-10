@@ -10,39 +10,56 @@ def intro(request):
 
 
 def chat_gpt_page(request):
-    if request.method != "POST":
-        form = forms.ChatGPTForm()
-        context = {"form": form}
-    else:
+    if request.method == "POST":
         form = forms.ChatGPTForm(request.POST)
-        context = {"form": form}
+        
+        print(f"\n\n\n{form.data} {form.is_valid()}\n\n\n")
+    
         if form.is_valid():
-            prompt = form.data["prompt"]
-            model = form.data["model"]
-            temperature = form.data["temperature"]
+            prompt = form.cleaned_data["prompt"]
+            model = form.cleaned_data["model"]
+            temperature = form.cleaned_data["accuracy"]
         
-            response = models.get_answer(prompt, model, temperature)
-            context = {"answer": response, "prompt": prompt}
+            context = {"form": form,
+                       "response": models.get_answer(prompt, model, temperature),
+                       "prompt": prompt,
+                       "model": model,
+                       "accuracy": temperature,
+                       }
+            return render(request=request, template_name="chat_gpt.html", context=context)
         
+    form = forms.ChatGPTForm(initial={"model": forms.ChatGPTForm.MODELS[0],
+                                      "accuracy": 100})
+    context = {"form": form}
     return render(request=request, template_name="chat_gpt.html", context=context)
 
 
 def generate_page(request):
-    if request.method != "POST":
-        form = forms.DalleForm()
-        context = {"form": form, "amount": 1}
-    else:
-        form = forms.ChatGPTForm(request.POST)
-        context = {"form": form}
+    if request.method == "POST":
+        form = forms.DalleForm(request.POST)
+        print(f"\n\n\n{form.data} {form.is_valid()}\n\n\n")
     
         if form.is_valid():
-            prompt = form.data["prompt"]
-            amount = form.data["amount"]
-            size = form.data["size"]
+            prompt = form.cleaned_data["prompt"]
+            amount = form.cleaned_data["amount"]
+            size = form.cleaned_data["size"]
         
-            response = models.get_generated_imgs(prompt, int(amount), size)
-            context = {"generated": response, "prompt": prompt, "size": size, "amount": amount}
-
+            context = {"form": form,
+                       "generated": models.get_generated_imgs(prompt, amount, size),
+                       "prompt": prompt,
+                       "amount": amount,
+                       "size": size,
+                       }
+        
+            if "gallery" in form.cleaned_data:
+                context["gallery"] = form.cleaned_data["gallery"]
+        
+            return render(request=request, template_name="generate.html", context=context)
+        
+    form = forms.DalleForm(initial={"size": forms.DalleForm.SIZES[0],
+                           "amount": 1})
+    context = {"form": form}
+    
     saved_imgs = models.get_saved_imgs()
     if saved_imgs:
         context["gallery"] = saved_imgs
@@ -56,11 +73,11 @@ def save_img(request, size, url):
 
 
 def generate_variation_page(request, size, url):
-    form = forms.ChatGPTForm()
+    initial = {"size": forms.DalleForm.SIZES[0], "amount": 1}
+    
     context = {
         "generated": models.variate_image(size, url),
-        "form": form,
-        "amount": 1,
+        "form": forms.DalleForm(initial=initial)
     }
     return render(request=request, template_name="generate.html", context=context)
 
