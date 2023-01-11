@@ -1,0 +1,4 @@
+[flake8]
+	exclude=migrations,test.py
+	ignore=W293
+	max-line-length=120

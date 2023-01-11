@@ -1,20 +1,15 @@
-import os
-import random
-from time import sleep
-
 from django.db import models
+
 import environ
-import requests
-from django.http import FileResponse
 
 import openai as ai
-from openai import InvalidRequestError
-from openai.error import RateLimitError
-from openai.error import APIConnectionError
+
+import requests
+
 
 # Create your models here.
 env = environ.Env()
-env.read_env("AI_Interface/.env")
+env.read_env("interface/.env")
 ai.api_key = env("OPENAI_SECRET_KEY")
 
 

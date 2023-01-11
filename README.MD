@@ -20,7 +20,9 @@ I suppose you're familiar with Python...
 ### Part 3 - run server
 1. Activate virtual environment 
 2. Go to project root directory
-3. Write "python3 manage.py migrate"
+3. Write:
+   - python3 manage.py makemigrations
+   - python3 manage.py migrate
 4. Start the server "python3 manage.py runserver"
 5. Enjoy - http://127.0.0.1:8000/generate/
 
