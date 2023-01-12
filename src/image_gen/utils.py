@@ -32,7 +32,7 @@ def variate_image(url):
     size = "256x256"
     
     try:
-        response = ai.Image.create_variation(image=image, n=5, size=size)
+        response = ai.Image.create_variation(image=image, n=1, size=size)
     except (ai.InvalidRequestError, ai.error.RateLimitError) as error:
         return [error.error["message"]]
     except ai.OpenAIError:
