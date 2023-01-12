@@ -5,14 +5,16 @@ from . import utils
 
 # Create your views here.
 
+DEF_VARIATE = 5
+DEF_INITIAL = {"size": forms.DalleForm.SIZES[2], "amount": 1}
 
-DEF_INITIAL_IMGS = {"size": forms.DalleForm.SIZES[2], "amount": 1}
 
-
-def ai_page(request, url=None, prompt=None, size=None):
-    print(f"\n\n{url}\n\n{prompt}\n\n{size}\n\n")
-    if url is not None and prompt is not None and size is not None:
-        return variate(request, url, prompt, size)
+def ai_page(request, url=None, prompt=None, size=None, amount=None):
+    if url is not None \
+            and prompt is not None \
+            and size is not None \
+            and amount is not None:
+        return variate(request, url, prompt, size, amount)
     
     if request.method == "POST":
         form = forms.DalleForm(request.POST)
@@ -34,7 +36,7 @@ def ai_page(request, url=None, prompt=None, size=None):
             
             return render(request=request, template_name="ai_page.html", context=context)
     
-    context = {"form": forms.DalleForm(DEF_INITIAL_IMGS)}
+    context = {"form": forms.DalleForm(DEF_INITIAL)}
     
     saved_imgs = utils.get_saved_imgs()
     if saved_imgs:
@@ -43,9 +45,11 @@ def ai_page(request, url=None, prompt=None, size=None):
     return render(request=request, template_name="ai_page.html", context=context)
 
 
-def variate(request, url, prompt, size):
-    initial = {"prompt": prompt, "size": size, "amount": 1}
-    context = {"generated": utils.variate_image(url), "form": forms.DalleForm(initial=initial)}
+def variate(request, url, prompt, size, amount):
+    initial = {"prompt": prompt, "size": size, "amount": amount}
+    context = {"generated": utils.variate_image(url, DEF_VARIATE),
+               "form": forms.DalleForm(initial=initial)}
+    context.update(initial)
     return render(request=request, template_name="ai_page.html", context=context)
 
 

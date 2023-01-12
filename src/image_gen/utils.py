@@ -27,12 +27,12 @@ def get_generated_imgs(prompt, number, size):
     return urls
 
 
-def variate_image(url):
+def variate_image(url, amount):
     image = requests.request(url=url, method="GET").content
     size = "256x256"
     
     try:
-        response = ai.Image.create_variation(image=image, n=1, size=size)
+        response = ai.Image.create_variation(image=image, n=amount, size=size)
     except (ai.InvalidRequestError, ai.error.RateLimitError) as error:
         return [error.error["message"]]
     except ai.OpenAIError:
