@@ -1,0 +1,49 @@
+{% extends "main.html" %}
+
+{% block content %}
+
+    <br>
+    <form action="{% url "image_generator" %}" method="post" id="generateForm">
+        {% csrf_token %}
+        <table class="generate">
+            <tr>
+                <td class="title">
+                    {{ form.size.label }}
+                </td>
+                <td class="title">
+                    {{ form.amount.label }}
+                </td>
+            </tr>
+            <tr>
+                <td class="field">
+                    {% for size in form.size %}
+                        {{ size }}
+                    {% endfor %}
+                </td>
+                <td class="field">
+                    {{ form.amount }}
+                </td>
+            </tr>
+        </table>
+
+        <div class="default-padding">
+            {{ form.prompt }}
+        </div>
+
+        <input type="submit" id="submitButton" class="main" value="Generate">
+
+        {% include "_generated_images.html" %}
+    </form>
+
+    {% include "_saved_images.html" %}
+
+
+    <script>
+        document.getElementById("generateForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+            document.getElementById("submitButton").disabled = true;
+            this.submit();
+        });
+    </script>
+
+{% endblock %}

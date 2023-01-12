@@ -24,15 +24,15 @@ I suppose you're familiar with Python...
    - python3 manage.py makemigrations
    - python3 manage.py migrate
 4. Start the server "python3 manage.py runserver"
-5. Enjoy - http://127.0.0.1:8000/generate/
+5. Enjoy - http://127.0.0.1:8000/
 
 ## Current functionality:
 
 ### Main page
-![Main page](static/main_page.png "Main page")
+![Main page](src/static/imgs/main_page.png "Main page")
 
 ### Chat AIs
-![Chat AIs](static/chat.png "Chat AIs")
+![Chat AIs](src/static/imgs/chat.png "Chat AIs")
 
 ### Dall-E (image generating model)
-![Dalle](static/generate.png "Dalle")
+![Dalle](src/static/imgs/generate.png "Dalle")

@@ -1,0 +1,178 @@
+/* Navigation */
+/*.first-part {*/
+/*    float: left;*/
+/*    text-align: center;*/
+/*    display: flex;*/
+/*    align-items: center;*/
+/*    justify-content: center;*/
+/*    height: 100px;*/
+/*    width:20%;*/
+/*}*/
+
+/*.second-part {*/
+/*    float: left;*/
+/*    text-align: center;*/
+/*    display: flex;*/
+/*    align-items: center;*/
+/*    justify-content: center;*/
+/*    height: 100px;*/
+/*    width:80%;*/
+/*}*/
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5ede5; /* white background */
+    text-align: center;
+}
+
+h1 {
+    /*display: inline-block;*/
+    text-align: center;
+    color: #f6a281; /* light salmon color */
+    font-size: 3em; /* 3 times the size of the base font */
+}
+
+table {
+    text-align: center;
+    margin: 0 auto;
+}
+
+table.navigation {
+    margin: auto
+}
+
+table.navigation td {
+    width: 150px;
+    font-size: 1.2em;
+}
+
+table.home {
+    border-collapse: collapse;
+    border: 2px solid #93bff8; /* blue border */
+    width: 75%; /* 75% of the width of the containing element */
+}
+
+table.home td {
+    padding: 5px;
+    width: 500px;
+    background-color: #d0eaf3; /* light blue color */
+}
+
+table.models {
+    border-collapse: collapse;
+    width: 1100px;
+}
+
+table.models td.title {
+    padding-bottom: 30px;
+}
+
+table.models td.model {
+    padding: 5px;
+}
+
+table.generate {
+    width: 50%
+}
+
+table.generate td.title {
+    text-align: center;
+    padding: 10px;
+    width: 50%;
+}
+
+table.generate td.field {
+    text-align: center;
+}
+
+table.generated-images {
+    display: inline-block;
+}
+
+table.generated-images td {
+    width: 33%
+}
+
+input.main {
+    margin-top: 10px;
+    font-size: 1.2em; /* 1.2 times the size of the base font */
+}
+
+input.secondary {
+    margin-top: 10px;
+    font-size: 0.8em;
+    width: 5em;
+}
+
+textarea {
+    padding-top: 10px;
+    width: 50%; /* 75% of the width of the containing element */
+    font-size: 1.2em; /* 1.2 times the size of the base font */
+    text-align: center;
+}
+
+a {
+    color: #0000ff; /* blue color */
+    text-decoration: none;
+}
+
+a:hover {
+    color: #ff0000; /* red color */
+}
+
+.conversation {
+    text-align: left;
+    margin: 20px auto;
+    background: #fff5d5;
+    width: 75%;
+    padding: 10px;
+    overflow-y: scroll; /* add scrollbars if necessary */
+}
+
+.image {
+    margin: 20px auto;
+    width: 80%; /* 75% of the width of the containing element */
+}
+
+.gallery {
+    margin: 20px auto;
+    width: 75%; /* 75% of the width of the containing element */
+    background: #fff5d5;
+    padding: 10px;
+    overflow-y: scroll; /* add scrollbars if necessary */
+}
+
+.footer {
+    font-size: 0.8em;
+    text-align: center;
+    margin-top: 20px;
+    border-top: 1px solid #cccccc; /* light grey color */
+    padding-top: 10px;
+}
+
+.navigator {
+    border-bottom: 1px solid #cccccc; /* light grey color */
+    padding-bottom: 20px;
+}
+
+img.size {
+    width: 200px;
+    height: 200px;
+    padding-top: 10px;
+    padding-bottom: 0;
+    border: 0;
+    transition: transform .2s; /* animate the zoom effect */
+}
+
+img.zoom {
+    transform: scale(3); /* increase the size of the image on hover */
+}
+
+.default-padding {
+    padding: 7px;
+}
+
+.default-indent {
+    margin-inline: 5px;
+    margin-left: 20px;
+}

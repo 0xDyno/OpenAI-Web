@@ -1,0 +1,16 @@
+{% include "main.html" %}
+
+{% block content %}
+    <table>
+        <tr>
+            <td>
+                <p>To use the Interface you have to log in. We don't collect emails, just a logic and password.</p>
+                <p>Because of that be careful to not lose your password. No password - no access.</p>
+                <p>Just like with the Web3 Private Key.</p>
+            </td>
+        </tr>
+        <tr>
+            {% include "_authorization.html" %}
+        </tr>
+    </table>
+{% endblock %}

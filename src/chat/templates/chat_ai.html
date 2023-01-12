@@ -1,0 +1,73 @@
+{% extends "main.html" %}
+
+{% block content %}
+    <br>
+    <table class="models" id="aiTable">
+        <tr>
+            <td style="text-align: left; padding-bottom: 30px; width: 100px;">AI</td>
+            <td class="title">Davinci 03 +</td>
+            <td class="title"><s>Davinci 02</s></td>
+            <td class="title">Curie</td>
+            <td class="title">Babbage</td>
+            <td class="title">Ada</td>
+        </tr>
+        <tr>
+            <td style="text-align: left; width: 100px;">Description</td>
+            <td class="model">The smartest here. Complex, humanized</td>
+            <td class="model">Good at translating natural language to code.</td>
+            <td class="model">A bit worse than Davinci but faster</td>
+            <td class="model">A bit better, than Ada, but still fast</td>
+            <td class="model">The Fastest - Weak. Parsing text, address correction</td>
+        </tr>
+        <tr>
+            <td style="text-align: left; width: 100px;">Tech</td>
+            <td class="model">Text, 4000 symbols</td>
+            <td class="model">Code, 8000 symbols</td>
+            <td class="model">Text, 1000 symbols</td>
+            <td class="model">Text, 1000 symbols</td>
+            <td class="model">Text, 1000 symbols</td>
+        </tr>
+    </table>
+    <br>
+
+    <form action="{% url "chat" %}#aiTable" method="post" id="interact_form">
+        {% csrf_token %}
+
+        {# I was searching for this *** decision for *** 3 days using tons of *** code on Google and ChatGPT AI #}
+        <div class="default-padding">
+            {% for model in form.model %}
+                {{ model }}
+            {% endfor %}
+        </div>
+
+        <div class="default-padding">
+            <span style="position: relative; top: -3px;">Creative</span>
+            {{ form.accuracy }}
+            <span style="position: relative; top: -3px;">Accurate</span>
+        </div>
+
+        <div class="default-padding">
+            {{ form.prompt }}
+        </div>
+
+        <input type="submit" class="main" name="submitButton" id="submitButton" value="Send">
+    </form>
+
+    {% if response %}
+
+        <div class="conversation">
+            {% load static %}
+            {{ response|linebreaks }}
+        </div>
+
+    {% endif %}
+
+    <script>
+        // script to block submit button after click
+        document.getElementById("interact_form").addEventListener("submit", function (event) {
+            event.preventDefault();
+            document.getElementById("submitButton").disabled = true;
+            this.submit();
+        });
+    </script>
+{% endblock %}
