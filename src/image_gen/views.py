@@ -9,13 +9,7 @@ DEF_VARIATE = 5
 DEF_INITIAL = {"size": forms.DalleForm.SIZES[2], "amount": 1}
 
 
-def ai_page(request, url=None, prompt=None, size=None, amount=None):
-    if url is not None \
-            and prompt is not None \
-            and size is not None \
-            and amount is not None:
-        return variate(request, url, prompt, size, amount)
-    
+def ai_page(request):
     if request.method == "POST":
         form = forms.DalleForm(request.POST)
         print(f"\n\n\n{form.data} {form.is_valid()}\n\n\n")
