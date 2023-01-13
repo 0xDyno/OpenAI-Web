@@ -1,20 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Interface</title>
-    {% load static %}
-    <link rel="shortcut icon" href="{% static 'imgs/favicon.ico' %}">
-    <link rel="stylesheet" type="text/css" href="{% static "web.css" %}">
+  <meta charset="UTF-8">
+  <title>Interface</title>
+  {% load static %}
+  <link rel="shortcut icon" href="{% static 'imgs/favicon.ico' %}">
+  <link rel="stylesheet" type="text/css" href="{% static "web.css" %}">
 </head>
 <body>
 
-    {% include "navigation.html" %}
+  {% include "navigation.html" %}
 
+  <div>
+    {% if messages %}
+
+      {% for message in messages %}
+        <p>{{ message|linebreaks }}</p>
+
+{#        {% for str in message %}#}
+{#          <p>{{ str }}</p>#}
+{#        {% endfor %}#}
+
+      {% endfor %}
+    {% endif %}
+  </div>
+  <div>
     {% block content %}
     {% endblock %}
+  </div>
 
-    {% include "footer.html" %}
+  {% include "footer.html" %}
 
 </body>
 </html>

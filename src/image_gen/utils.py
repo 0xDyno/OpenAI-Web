@@ -2,7 +2,10 @@ import openai as ai
 
 import requests
 
+from main.utils import load_openai_key
 
+
+@load_openai_key
 def get_generated_imgs(prompt, number, size):
     match size:
         case "1":
@@ -27,6 +30,7 @@ def get_generated_imgs(prompt, number, size):
     return urls
 
 
+@load_openai_key
 def variate_image(url, amount):
     image = requests.request(url=url, method="GET").content
     size = "256x256"

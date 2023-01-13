@@ -4,5 +4,4 @@ from .models import Settings
 
 # Register your models here.
 
-
 admin.site.register(Settings)

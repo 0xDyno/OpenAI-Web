@@ -2,7 +2,6 @@
 
 {% block content %}
 
-    <br>
     <form action="{% url "image_generator" %}" method="post" id="generateForm">
         {% csrf_token %}
         <table class="generate">

@@ -2,11 +2,13 @@ import environ
 
 import openai as ai
 
+from main.utils import load_openai_key
+
 env = environ.Env()
 env.read_env("config/.env")
-ai.api_key = env("OPENAI_SECRET_KEY")
 
 
+@load_openai_key
 def get_answer(prompt, model, temp):
     temp = 100 if temp > 100 else temp
     temp = 0 if temp < 0 else temp

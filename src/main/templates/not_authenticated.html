@@ -1,0 +1,12 @@
+{% extends "main.html" %}
+
+{% block content %}
+
+  <p>To use the Interface you have to be authorized. We don't collect emails, just a logic and password. And remember:</p>
+  <p>No Login or Password - No Access.</p>
+
+  <a href="{% url "login" %}" style="font-size: 1.3em">
+    Sign in
+  </a>
+
+{% endblock %}

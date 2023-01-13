@@ -1,5 +1,8 @@
 from django.shortcuts import render
 
+from main.models import Settings
+from main.views import not_authenticated
+
 from . import forms
 from . import utils
 
@@ -9,6 +12,9 @@ DEF_INITIAL_CHAT = {"model": forms.ChatGPTForm.MODELS[0], "accuracy": 100}
 
 
 def ai_page(request):
+    if not request.user.is_authenticated:
+        return not_authenticated(request)
+    
     if request.method == "POST":
         form = forms.ChatGPTForm(request.POST)
         
@@ -19,8 +25,9 @@ def ai_page(request):
             model = form.cleaned_data["model"]
             temperature = form.cleaned_data["accuracy"]
             
+            key = Settings.objects.get(user=request.user).openai_key
             context = {"form": form,
-                       "response": utils.get_answer(prompt, model, temperature),
+                       "response": utils.get_answer(key, prompt, model, temperature),
                        "prompt": prompt,
                        "model": model,
                        "accuracy": temperature,

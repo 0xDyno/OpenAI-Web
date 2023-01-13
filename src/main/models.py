@@ -3,9 +3,9 @@ from django.db import models
 
 
 class Settings(models.Model):
-    user_id = models.ForeignKey(User, on_delete=models.deletion.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.deletion.CASCADE)
     
-    openai_key = models.CharField(blank=True, null=True, max_length=100)
+    openai_key = models.CharField(max_length=100, blank=True, default="")
     
     updated = models.DateTimeField(auto_now=True)
     
