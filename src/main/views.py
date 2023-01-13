@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render
 
@@ -31,10 +32,8 @@ def signup_page(request):
     return render(request=request, template_name="signup.html", context=context)
 
 
+@login_required
 def settings_page(request):
-    if not request.user.is_authenticated:
-        return not_authenticated(request)
-    
     if request.method == "POST":
         form = SettingsFrom(request.POST)
         if form.is_valid():
@@ -55,7 +54,3 @@ def settings_page(request):
     
     context = {"form": form}
     return render(request=request, template_name="settings.html", context=context)
-    
-
-def not_authenticated(request):
-    return render(request=request, template_name="not_authenticated.html")

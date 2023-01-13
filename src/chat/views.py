@@ -1,7 +1,7 @@
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
 
 from main.models import Settings
-from main.views import not_authenticated
 
 from . import forms
 from . import utils
@@ -11,10 +11,8 @@ from . import utils
 DEF_INITIAL_CHAT = {"model": forms.ChatGPTForm.MODELS[0], "accuracy": 100}
 
 
+@login_required()
 def ai_page(request):
-    if not request.user.is_authenticated:
-        return not_authenticated(request)
-    
     if request.method == "POST":
         form = forms.ChatGPTForm(request.POST)
         

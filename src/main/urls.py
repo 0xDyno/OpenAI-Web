@@ -10,6 +10,4 @@ urlpatterns = [
     
     path(r"signup/", views.signup_page, name="signup"),
     path(r"signout/", auth_views.LogoutView.as_view(), name="signout"),
-    
-    path(r"not_authenticated/", views.not_authenticated, name="not_authenticated"),
 ]
