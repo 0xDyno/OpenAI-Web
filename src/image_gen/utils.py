@@ -1,7 +1,12 @@
+from threading import Thread
+
 import openai as ai
 
 import requests
 
+from django.core.files.base import ContentFile
+
+from image_gen.models import ImageModel
 from main.utils import load_openai_key
 
 
@@ -53,3 +58,23 @@ def increase_image_resolution(url: str):
 
 def get_saved_imgs():
     return list()
+
+
+def save_image_to_db(request, url, prompt, size):
+    def work():
+        r = requests.request(url=url, method="GET")
+        content = ContentFile(r.content)
+        name = get_img_name_from_url(url)
+    
+        db_image = ImageModel(user=request.user, prompt=prompt, resolution=size)
+        db_image.image.save(name=name, content=content)
+        db_image.save()
+    
+    thread = Thread(target=work)
+    thread.start()
+
+
+def get_img_name_from_url(url: str):
+    for part in url.split("/"):
+        if part.startswith("img"):
+            return part.split("?")[0]

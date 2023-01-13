@@ -5,6 +5,7 @@ from main.models import Settings
 
 from . import forms
 from . import utils
+from .models import Conversation
 
 # Create your views here.
 
@@ -23,13 +24,20 @@ def ai_page(request):
             model = form.cleaned_data["model"]
             temperature = form.cleaned_data["accuracy"]
             
+            
             key = Settings.objects.get(user=request.user).openai_key
+            response = utils.get_answer(key, prompt, model, temperature)
             context = {"form": form,
-                       "response": utils.get_answer(key, prompt, model, temperature),
+                       "response": response,
                        "prompt": prompt,
                        "model": model,
                        "accuracy": temperature,
                        }
+            
+            conversation = Conversation(user=request.user, prompt=prompt, response=response,
+                         model=model, accuracy=utils.convert_temp(temperature))
+            conversation.save()
+            
             return render(request=request, template_name="chat_ai.html", context=context)
     
     form = forms.ChatGPTForm(initial=DEF_INITIAL_CHAT)

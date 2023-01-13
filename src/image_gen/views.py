@@ -1,10 +1,12 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.shortcuts import render
 
 from main.models import Settings
 
 from . import forms
 from . import utils
+from .models import ImageModel
 
 # Create your views here.
 
@@ -38,7 +40,7 @@ def ai_page(request):
     
     context = {"form": forms.DalleForm(DEF_INITIAL)}
     
-    saved_imgs = utils.get_saved_imgs()
+    saved_imgs = ImageModel.objects.filter(user=request.user)
     if saved_imgs:
         context["gallery"] = saved_imgs
     
@@ -57,15 +59,12 @@ def variate(request, url, prompt, size, amount):
 
 @login_required
 def save_page(request, url, prompt, size):
-    return render(request=request, template_name="save.html",
-                  context={"url": url, "prompt": prompt, "size": size})
+    utils.save_image_to_db(request, url, prompt, size)
+    return render(request=request, template_name="save.html")
 
 
 @login_required
 def resolution_page(request, url, prompt, size):
-    if not request.user.is_authenticated:
-        return not_authenticated(request)
-    
     return render(request=request, template_name="resolution.html",
                   context={"result": utils.increase_image_resolution(url), "prompt": prompt, "size": size})
 
@@ -74,6 +73,12 @@ def resolution_page(request, url, prompt, size):
 def gallery_page(request):
     context = {"message": "Not ready yet. But magic is coming..."}
     return render(request=request, template_name="gallery_page.html", context=context)
+
+
+@login_required
+def download_page(request, url, prompt, size):
+    return render(request=request, template_name="download.html",
+                  context={"url": url, "prompt": prompt, "size": size})
 
 
 @login_required

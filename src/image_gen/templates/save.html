@@ -1,15 +1,16 @@
-<center><h1>Start download... </h1></center>
-
-<a href="{{ url }}" id="download-link" download>
-    <img src="{{ url }}" alt="image">
-</a>
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body style="background-color: #000000">
+<center>
+    <h1>Save Page</h1>
+    <p>Will be closed after saving the image</p>
+</center>
 
 <script>
-    const link = document.getElementById("download-link");
-    link.addEventListener("click", function() {
-        setTimeout(function() {
-            window.close();
-        }, 2000);
-    });
-    document.getElementById("download-link").click();
+    window.close();
 </script>
+</body>
+</html>
+
