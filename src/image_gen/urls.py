@@ -11,5 +11,6 @@ urlpatterns = [
     
     path(r"gallery/", views.gallery_page, name="gallery"),
     path(r"gallery/image/<int:pk>/", views.image_page, name="gallery_image"),
-    path(r"image_generator/download/<path:url>/<str:prompt>/<int:size>/", views.download_page, name="download"),
+    path(r"gallery/image/delete/<int:pk>/", views.delete_image_page, name="delete_image"),
+    path(r"gallery/download/<path:url>/<str:prompt>/<int:size>/", views.download_page, name="download"),
 ]

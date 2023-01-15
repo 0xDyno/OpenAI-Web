@@ -1,32 +1,46 @@
 {# Code part to display Saved images from DB #}
-
+{% load static %}
 {% if gallery %}
-    <p style="font-size: 20px">Saved Images:</p>
+    <p style="font-size: 20px">{{ gallery_message }}</p>
     <div class="gallery">
 
         {% for dict in gallery %}
+            <div>{{ dict.num }}
 
-            <p style="text-align: left">
-                {{ dict.date }} | Size: {{ dict.size }} | Prompt: {{ dict.prompt }}
-            </p>
+                <p style="text-align: left">
+                    {{ dict.date }} | Size: {{ dict.size }} | Prompt: {{ dict.prompt }}
+                </p>
 
-            {% if dict.number == 1 %}
+                {% for img in dict.images %}
+                    {#                    <a href="{% url "gallery_image" img.pk %}">#}
+                    {#                        <img src="{% static img.path %}" class="size" alt="generated image" id="img">#}
+                    {#                    </a>#}
 
-                <div id="image-history">{{ dict.1 }}</div>
-
-            {% else %}
-
-                {% for num in dict.number %}
-
-                    <p>{{ dict| }}</p>
-                    <p>{{ forloop.counter0 }}</p>           {#  works as 0 1 2 3 etc #}
-                    <p>{{ dict.forloop.counter0 }}</p>
-
-                    <div id="image-history">{{ dict.num }}</div>
+                    <table class="generated-images" id="action_buttons">
+                        <tr style="width: 50%">
+                            <th colspan="2">
+                                <a href="{% url "gallery_image" img.pk %}">
+                                    <img src="{% static img.path %}" class="size"
+                                         alt="generated image" id="img">
+                                </a>
+                            </th>
+                        </tr>
+                        <tr>
+                            <td style="width: 50%;">
+                                <a href="{% static img.path %}" target="_blank" download>
+                                    <input type="button" class="secondary_gallery" value="Download">
+                                </a>
+                            </td>
+                            <td style="width: 50%;">
+                                <a href="{% url "delete_image" img.id %}" target="_blank">
+                                    <input type="button" class="secondary_gallery" value="Delete">
+                                </a>
+                            </td>
+                        </tr>
+                    </table>
                 {% endfor %}
 
-            {% endif %}
-
+            </div>
         {% endfor %}
 
     </div>

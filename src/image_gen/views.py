@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from main.models import Settings
 from . import forms
@@ -15,9 +15,10 @@ DEFAULT_INITIAL = {"size": forms.DalleForm.SIZES[2], "amount": 1}
 @login_required
 def ai_page(request):
     context = {}
-    saved_imgs = utils.get_saved_imgs(request.user)
+    saved_imgs = utils.get_saved_imgs(request.user, 20)
     if saved_imgs:
         context["gallery"] = saved_imgs
+        context["gallery_message"] = "Saved images:"
     
     if request.method == "POST":
         form = forms.DalleForm(request.POST)
@@ -66,7 +67,14 @@ def resolution_page(request, url, prompt, size):
 
 @login_required
 def gallery_page(request):
-    context = {"message": "Not ready yet. But magic is coming..."}
+    gallery = utils.get_saved_imgs(request.user)
+    if gallery:
+        context = {
+            "gallery_message": "Wow, you have wonderful collection!",
+            "gallery": gallery,
+        }
+    else:
+        context = {"message": "Nothing is here... But magic is coming! Try Dall-E"}
     return render(request=request, template_name="gallery_page.html", context=context)
 
 
@@ -78,9 +86,29 @@ def download_page(request, url, prompt, size):
 
 @login_required
 def image_page(request, pk):
-    if pk > 100:
-        context = {"message": "404. Not Found"}
-    else:
-        context = {"message": "Magic things happens here.."}
+    try:
+        image = GeneratedImageModel.objects.get(pk=pk)
+    except GeneratedImageModel.DoesNotExist:
+        return render(request=request, template_name="image_page.html", context={"message": "Error 404: Not found."})
     
+    if image.user != request.user and not request.user.is_superuser:
+        message = "This is private picture, you don't have permissions to view it"
+        return render(request=request, template_name="image_page.html", context={"message": message})
+    
+    context = {"image": image, "size": utils.get_resolution(image.resolution)}
     return render(request=request, template_name="image_page.html", context=context)
+
+
+@login_required
+def delete_image_page(request, pk):
+    try:
+        image = GeneratedImageModel.objects.get(pk=pk)
+    except GeneratedImageModel.DoesNotExist:
+        return render(request=request, template_name="image_page.html", context={"message": "Error 404: Not found."})
+    
+    if image.user != request.user and not request.user.is_superuser:
+        message = "This is private picture, you don't have permissions to delete it"
+        return render(request=request, template_name="image_page.html", context={"message": message})
+
+    image.delete()
+    return redirect(to="gallery")

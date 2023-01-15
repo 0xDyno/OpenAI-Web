@@ -10,6 +10,8 @@ class GeneratedImageModel(models.Model):
     
     prompt = models.TextField()
     image = models.ImageField(upload_to="image_gen/static/images")
+    path = models.CharField(max_length=200, default="images/")
+    
     resolution = models.CharField(max_length=9)
     created = models.DateTimeField(auto_now_add=True)
     

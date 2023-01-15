@@ -47,48 +47,58 @@ def increase_image_resolution(url: str):
            "But it's not ready, sorry..".format(url)
 
 
-def get_saved_imgs(user) -> list:
-    """Return format:
-    Date - Size - prompt
-    img1 img2 img3
+def get_saved_imgs(user, number=500) -> list:
+    """Return format -> list with dicts:
+    [
+        {
+            "date": date,
+            "size": last_size,
+            "prompt": last_prompt,
+            "images": ["images/some_chars.png", "url_2", "url_3", "url_4"],
+        },
+        {"size": last_size, "prompt": last_prompt, "date": date, "images": [list with urls]},
+        {"size": last_size, "prompt": last_prompt, "date": date, "images": [list with urls]},
+        {"size": last_size, "prompt": last_prompt, "date": date, "images": [list with urls]},
+    ]
     """
     raw = list(GeneratedImageModel.objects.filter(user=user))
-    total = len(raw)
-    raw = raw[total-20:]
+    raw = raw[-number:] if number else raw
     
     result = divide_by_prompt(raw, [])
+    [print(x) for x in result]
     return result
 
 
-def divide_by_prompt(raw: list, result: list, current_dict: dict = None, last_prompt: str = None, number=1) -> list:
+def divide_by_prompt(raw: list, result: list, current_dict: dict = None,
+                     last_prompt: str = None, last_size: int = None) -> list:
     """
-    Function serves goal to divide images to sets with the save prompt (same set).
+    Function serves goal to divide images to sets with the save prompt & size.
     
-    Recursion. If we have elements in raw - get it, delete from the list. If last_prompt == current prompt - that
-        element should be in current_dict, and we need increase number. If last_prompt != current prompt - that
-        means it's end for old dict, we save it and start new one where we add new set with same prompt
+    Recursion. If we have elements in raw - get last, delete from the list.
+        If last_prompt != current prompt - that means it's first iteration or end for old dict. We need to check it...
+    if we have elements in current_dict - save info fist. Then init - last info, date, current_dict etc..
+        If last_prompt == current prompt - that element should be in current_dict, append and move on again to recursion
     """
     if raw:
         img = raw.pop()
         
-        if last_prompt == img.prompt:
-            number += 1
-            current_dict["number"] = range(number)
-            current_dict[number] = img
-            return divide_by_prompt(raw, result, current_dict, last_prompt, number)
+        if last_prompt == img.prompt and img.resolution == last_size:
+            current_dict["images"].append(img)
+            return divide_by_prompt(raw, result, current_dict, last_prompt, last_size)
         else:
             if current_dict:
                 result.append(current_dict)
+
+            last_size = img.resolution
             last_prompt = img.prompt
             date = datetime.date(img.created).strftime("%d-%m-%Y")
             current_dict = {
-                "number": 1,
-                1: img,
                 "size": get_resolution(img.resolution),
                 "prompt": last_prompt,
                 "date": date,
+                "images": [img],
             }
-            return divide_by_prompt(raw, result, current_dict, last_prompt)
+            return divide_by_prompt(raw, result, current_dict, last_prompt, last_size)
     else:
         if current_dict:
             result.append(current_dict)
@@ -112,8 +122,9 @@ def save_image_to_db(request, url, prompt, size):
         r = requests.request(url=url, method="GET")
         content = ContentFile(r.content)
         name = get_img_name_from_url(url)
+        path = "images/" + name
         
-        db_image = GeneratedImageModel(user=request.user, prompt=prompt, resolution=size)
+        db_image = GeneratedImageModel(user=request.user, prompt=prompt, resolution=size, path=path)
         db_image.image.save(name=name, content=content)
         db_image.save()
     
@@ -123,7 +134,7 @@ def save_image_to_db(request, url, prompt, size):
 
 def get_img_name_from_url(url: str):
     """type should be                 star -> img_name_efwef.png <- end
-    https://any-domain.com/?any-sign-gesg&any_img_name_efwef.png?end_this_part_wont_be_added=fefwef..               """
+    https://any-domain.com/?any-sign-gesg&anyHimg_name_efwef.png?end_this_part_wont_be_added=fefwef..               """
     for part in url.split("/"):
         if part.startswith("img"):
             return part.split("?")[0]
