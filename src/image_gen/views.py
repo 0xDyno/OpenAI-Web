@@ -1,21 +1,24 @@
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
 from django.shortcuts import render
 
 from main.models import Settings
-
 from . import forms
 from . import utils
-from .models import ImageModel
+from .models import GeneratedImageModel
 
 # Create your views here.
 
-DEF_VARIATE = 5
-DEF_INITIAL = {"size": forms.DalleForm.SIZES[2], "amount": 1}
+DEFAULT_VARIATE = 5
+DEFAULT_INITIAL = {"size": forms.DalleForm.SIZES[2], "amount": 1}
 
 
 @login_required
 def ai_page(request):
+    context = {}
+    saved_imgs = utils.get_saved_imgs(request.user)
+    if saved_imgs:
+        context["gallery"] = saved_imgs
+    
     if request.method == "POST":
         form = forms.DalleForm(request.POST)
         print(f"\n\n\n{form.data} {form.is_valid()}\n\n\n")
@@ -26,24 +29,16 @@ def ai_page(request):
             size = form.cleaned_data["size"]
             
             key = Settings.objects.get(user=request.user).openai_key
-            context = {"form": form,
-                       "generated": utils.get_generated_imgs(key, prompt, amount, size),
-                       "prompt": prompt,
-                       "amount": amount,
-                       "size": size,
-                       }
-            
-            if "gallery" in form.cleaned_data:
-                context["gallery"] = form.cleaned_data["gallery"]
-            
+            data = {"form": form,
+                    "generated": utils.get_generated_imgs(key, prompt, amount, size),
+                    "prompt": prompt,
+                    "amount": amount,
+                    "size": size,
+                    }
+            context.update(data)
             return render(request=request, template_name="ai_page.html", context=context)
     
-    context = {"form": forms.DalleForm(DEF_INITIAL)}
-    
-    saved_imgs = ImageModel.objects.filter(user=request.user)
-    if saved_imgs:
-        context["gallery"] = saved_imgs
-    
+    context["form"] = forms.DalleForm(initial=DEFAULT_INITIAL)
     return render(request=request, template_name="ai_page.html", context=context)
 
 
@@ -51,7 +46,7 @@ def ai_page(request):
 def variate(request, url, prompt, size, amount):
     key = Settings.objects.get(user=request.user).openai_key
     initial = {"prompt": prompt, "size": size, "amount": amount}
-    context = {"generated": utils.variate_image(key, url, DEF_VARIATE),
+    context = {"generated": utils.variate_image(key, url, DEFAULT_VARIATE),
                "form": forms.DalleForm(initial=initial)}
     context.update(initial)
     return render(request=request, template_name="ai_page.html", context=context)

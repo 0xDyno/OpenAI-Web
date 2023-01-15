@@ -10,13 +10,13 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
+from os import getenv
 from pathlib import Path
 
-import environ
+from dotenv import load_dotenv
 
 # Initialise environment variables
-env = environ.Env()
-env.read_env()
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / "subdir".
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,12 +25,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env("DJANGO_SECRET_KEY")
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
+SECRET_KEY = getenv("DJANGO_SECRET_KEY")
+DEBUG = getenv("DEBUG", default="False").lower().strip() in ["true", "on", "1"]
+ALLOWED_HOSTS = getenv("ALLOWED_HOSTS", default="").split()
 
 # Application definition
 
@@ -67,7 +64,7 @@ TEMPLATES = [
         "DIRS": [BASE_DIR / "templates",
                  "main/templates",
                  "chat/templates",
-                 "image_generator/templates",
+                 "image_gen/templates",
                  ],
         "APP_DIRS": True,
         "OPTIONS": {
@@ -143,3 +140,7 @@ LOGIN_REDIRECT_URL = "profile"
 LOGOUT_REDIRECT_URL = "home"
 
 LOGIN_URL = "login"
+
+if DEBUG:
+    SHELL_PLUS = "ipython"
+    SHELL_PLUS_PRINT_SQL = True

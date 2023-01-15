@@ -5,7 +5,7 @@ from django.db import models
 # Create your models here.
 
 
-class ImageModel(models.Model):
+class GeneratedImageModel(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     
     prompt = models.TextField()
@@ -14,7 +14,12 @@ class ImageModel(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
-        return "Image, size = {}, \nPrompt: {}".format(self.resolution, self.prompt)
+        return "Image (id {}), size = {}, user = {}".format(self.id, self.resolution, self.user)
+    
+    def delete(self, **kwargs):
+        from os import remove
+        remove(self.image.name)
+        super().delete()
     
     class Meta:
         db_table = "images"

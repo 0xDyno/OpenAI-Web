@@ -1,18 +1,19 @@
-import environ
+from os import getenv
 
 import openai as ai
+from dotenv import load_dotenv
 
 from main.utils import load_openai_key
 
-env = environ.Env()
-env.read_env("config/.env")
+
+load_dotenv(dotenv_path="config/.env")
 
 
 @load_openai_key
 def get_answer(prompt, model, temp):
-    if model == env("DAVINCI3"):
+    if model == getenv("DAVINCI3"):
         max_tokens = 4000
-    elif model == env("DAVINCI2"):
+    elif model == getenv("DAVINCI2"):
         max_tokens = 8000
     else:
         max_tokens = 2000
@@ -23,6 +24,8 @@ def get_answer(prompt, model, temp):
         return response.choices[0].text
     except (ai.InvalidRequestError, ai.error.RateLimitError) as error:
         return f"Error: {error.error['message']}"
+    except ai.error.AuthenticationError as error:
+        return f"Error: {error.error['message']}" + "\n\nYou can setup your keys in your Profile's settings"
     except ai.OpenAIError:
         return "Sorry, unknown error happened. Try again later or contact support."
 

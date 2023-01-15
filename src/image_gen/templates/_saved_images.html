@@ -3,8 +3,31 @@
 {% if gallery %}
     <p style="font-size: 20px">Saved Images:</p>
     <div class="gallery">
-        {% for image in gallery %}
-            <div id="image-history">{{ image }}</div>
+
+        {% for dict in gallery %}
+
+            <p style="text-align: left">
+                {{ dict.date }} | Size: {{ dict.size }} | Prompt: {{ dict.prompt }}
+            </p>
+
+            {% if dict.number == 1 %}
+
+                <div id="image-history">{{ dict.1 }}</div>
+
+            {% else %}
+
+                {% for num in dict.number %}
+
+                    <p>{{ dict| }}</p>
+                    <p>{{ forloop.counter0 }}</p>           {#  works as 0 1 2 3 etc #}
+                    <p>{{ dict.forloop.counter0 }}</p>
+
+                    <div id="image-history">{{ dict.num }}</div>
+                {% endfor %}
+
+            {% endif %}
+
         {% endfor %}
+
     </div>
 {% endif %}

@@ -9,5 +9,8 @@ class Settings(models.Model):
     
     updated = models.DateTimeField(auto_now=True)
     
+    def __str__(self):
+        return "User {} (id {}) - settings id".format(self.user.username, self.user.id, self.id)
+    
     class Meta:
         db_table = "settings"

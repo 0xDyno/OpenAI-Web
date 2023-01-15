@@ -15,9 +15,7 @@ class Conversation(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
-        return f"{self.created}\n\t" \
-               f"Prompt: {self.prompt}\n\t" \
-               f"Answer: {self.response}"
+        return f"Conversation on date {self.created} - by user - {self.user} - with id - {self.id}"
     
     class Meta:
         db_table = "conversations"
