@@ -8,7 +8,6 @@ from .models import GeneratedImageModel
 
 # Create your views here.
 
-DEFAULT_VARIATE = 5
 DEFAULT_INITIAL = {"size": forms.DalleForm.SIZES[2], "amount": 1}
 
 
@@ -44,12 +43,30 @@ def ai_page(request):
 
 
 @login_required
-def variate(request, url, prompt, size, amount):
+def variate_url(request, url, prompt, size, amount):
     key = Settings.objects.get(user=request.user).openai_key
     initial = {"prompt": prompt, "size": size, "amount": amount}
-    context = {"generated": utils.variate_image(key, url, DEFAULT_VARIATE),
+    context = {"generated": utils.variate_image_by_url(key, url),
                "form": forms.DalleForm(initial=initial)}
     context.update(initial)
+    return render(request=request, template_name="ai_page.html", context=context)
+
+
+def variate_img(request, pk):
+    img = GeneratedImageModel.objects.get(pk=pk)
+    
+    initial = DEFAULT_INITIAL.copy()
+    initial.update({"prompt": img.prompt, "amount": utils.DEFAULT_VARIATE_AMOUNT})
+    
+    key = Settings.objects.get(user=request.user).openai_key
+    context = {
+        "generated": utils.variate_image_by_img(key, img.image.name),
+        "form": forms.DalleForm(initial=initial),
+        "prompt": img.prompt,
+        "size": img.resolution,
+        "amount": utils.DEFAULT_VARIATE_AMOUNT,
+    }
+    
     return render(request=request, template_name="ai_page.html", context=context)
 
 

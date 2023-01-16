@@ -1,6 +1,6 @@
 {# Code part to display Saved images from DB #}
-{% load static %}
 {% if gallery %}
+    {% load static %}
     <p style="font-size: 20px">{{ gallery_message }}</p>
     <div class="gallery">
 
@@ -17,8 +17,8 @@
                     {#                    </a>#}
 
                     <table class="generated-images" id="action_buttons">
-                        <tr style="width: 50%">
-                            <th colspan="2">
+                        <tr>
+                            <th colspan="3">
                                 <a href="{% url "gallery_image" img.pk %}">
                                     <img src="{% static img.path %}" class="size"
                                          alt="generated image" id="img">
@@ -26,14 +26,20 @@
                             </th>
                         </tr>
                         <tr>
-                            <td style="width: 50%;">
+                            <td style="width: auto">
                                 <a href="{% static img.path %}" target="_blank" download>
-                                    <input type="button" class="secondary_gallery" value="Download">
+                                    <input type="button" class="secondary" value="Download">
                                 </a>
                             </td>
-                            <td style="width: 50%;">
-                                <a href="{% url "delete_image" img.id %}" target="_blank">
-                                    <input type="button" class="secondary_gallery" value="Delete">
+                            <td style="width: auto">
+                                <a href="{% url "delete_image" img.id %}">
+                                    <input type="button" class="secondary" value="Delete">
+                                </a>
+                            </td>
+                            <td style="width: auto">
+                                <a href="{% url "variate_img" img.pk %}">
+                                    <input type="button" class="secondary" value="Variate"
+                                           style="width: 4.5em;">
                                 </a>
                             </td>
                         </tr>

@@ -1,7 +1,6 @@
 {% extends "main.html" %}
 
 {% block content %}
-
     <form action="{% url "image_generator" %}" method="post" id="generateForm">
         {% csrf_token %}
         <table class="generate">
@@ -48,9 +47,10 @@
                             </th>
                         </tr>
                         <tr>
+
                             <td>
-                                <a href="{% url "variate" url prompt size amount %}">
-                                    <input type="button" class="secondary" value="Variate">
+                                <a href="{% url "increase" url prompt size %}" target="_blank">
+                                    <input type="button" class="secondary" value="Increase" disabled>
                                 </a>
                             </td>
 
@@ -59,11 +59,13 @@
                                     <input type="button" class="secondary" value="Save">
                                 </a>
                             </td>
+
                             <td>
-                                <a href="{% url "increase" url prompt size %}" target="_blank">
-                                    <input type="button" class="secondary" value="Increase">
+                                <a href="{% url "variate_url" url prompt size amount %}">
+                                    <input type="button" class="secondary" value="Variate">
                                 </a>
                             </td>
+
                         </tr>
                     </table>
                 {% endfor %}
@@ -72,7 +74,48 @@
     {% endif %}
 
 
-    {% include "_saved_images.html" %}
+    {% if gallery %}
+        {% load static %}
+        <div class="gallery">
+
+            {% for dict in gallery %}
+                <p style="text-align: left">
+                    {{ dict.date }} - {{ dict.size }} - {{ dict.prompt }}
+                </p>
+                {% for img in dict.images %}
+                    <table class="generated-images">
+                        <tr style="width: 50%">
+                            <th colspan="3">
+                                <img src="{% static img.path %}" class="size" alt="generated image" id="img"
+                                     onclick="this.classList.toggle('zoom');">
+                            </th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <a href="{% static img.path %}" download>
+                                    <input type="button" class="secondary" value="Download"
+                                           style="width: 6em">
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{% url "gallery_image" img.pk %}">
+                                    <input type="button" class="secondary" value="Open"
+                                           style="width: 4em;">
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{% url "variate_img" img.pk %}">
+                                    <input type="button" class="secondary" value="Variate"
+                                           style="width: 4.5em;">
+                                </a>
+                            </td>
+                        </tr>
+                    </table>
+                {% endfor %}
+            {% endfor %}
+
+        </div>
+    {% endif %}
 
 
     <script>

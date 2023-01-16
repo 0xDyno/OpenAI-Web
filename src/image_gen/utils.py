@@ -4,10 +4,13 @@ from threading import Thread
 import openai as ai
 import requests
 from django.core.files.base import ContentFile
-from django.db.models import QuerySet
 
 from image_gen.models import GeneratedImageModel
 from main.utils import load_openai_key
+
+
+DEFAULT_VARIATE_AMOUNT = 5
+DEFAULT_GENERATE_SIZE = "256x256"
 
 
 @load_openai_key
@@ -27,9 +30,8 @@ def get_generated_imgs(prompt, number, size):
 
 
 @load_openai_key
-def variate_image(url, amount):
+def variate_image_by_url(url, amount: int = DEFAULT_VARIATE_AMOUNT, size: str = DEFAULT_GENERATE_SIZE):
     image = requests.request(url=url, method="GET").content
-    size = "256x256"
     
     try:
         response = ai.Image.create_variation(image=image, n=amount, size=size)
@@ -38,6 +40,21 @@ def variate_image(url, amount):
     except ai.OpenAIError:
         return ["Sorry, unknown error happened. Try again later or contact support."]
     
+    urls = [data["url"] for data in response['data']]
+    return urls
+
+
+@load_openai_key
+def variate_image_by_img(path, amount: int = DEFAULT_VARIATE_AMOUNT, size: str = DEFAULT_GENERATE_SIZE):
+    with open(path, "rb") as r:
+        img_bytes = r.read()
+    
+    try:
+        response = ai.Image.create_variation(image=img_bytes, n=amount, size=size)
+    except (ai.InvalidRequestError, ai.error.RateLimitError) as error:
+        return [error.error["message"]]
+    except ai.OpenAIError:
+        return ["Sorry, unknown error happened. Try again later or contact support."]
     urls = [data["url"] for data in response['data']]
     return urls
 
@@ -65,7 +82,6 @@ def get_saved_imgs(user, number=500) -> list:
     raw = raw[-number:] if number else raw
     
     result = divide_by_prompt(raw, [])
-    [print(x) for x in result]
     return result
 
 

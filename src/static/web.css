@@ -89,7 +89,7 @@ table.generated-images {
   display: inline-block;
 }
 
-table.generated-images td {
+table.generated-images tr {
   width: 33%
 }
 
@@ -112,13 +112,6 @@ input.main {
 input.secondary {
   margin-top: 10px;
   font-size: 0.8em;
-  width: 5em;
-}
-
-input.secondary_gallery {
-  margin-top: 10px;
-  font-size: 0.8em;
-  width: 7em;
 }
 
 textarea {
