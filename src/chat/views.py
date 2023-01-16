@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
 from main.models import Settings
@@ -15,7 +15,7 @@ DEF_INITIAL_CHAT = {"model": forms.ChatGPTForm.MODELS[0], "accuracy": 100}
 @login_required
 def ai_page(request):
     context = {}
-    history = list(Conversation.objects.filter(user=request.user))
+    history = list(Conversation.objects.filter(user=request.user))[-5:]
     if history:
         history.reverse()
         context["history"] = history
@@ -50,3 +50,25 @@ def ai_page(request):
     form = forms.ChatGPTForm(initial=DEF_INITIAL_CHAT)
     context["form"] = form
     return render(request=request, template_name="chat_ai.html", context=context)
+
+
+@login_required
+def all_history(request):
+    context = {}
+    history = list(Conversation.objects.filter(user=request.user))
+    if history:
+        history.reverse()
+        context["history"] = history
+    else:
+        context["message"] = "No history at the moment"
+
+    return render(request=request, template_name="all_history.html", context=context)
+
+
+@login_required
+def delete(request, pk):
+    try:
+        to_delete = Conversation.objects.get(user=request.user, pk=pk)
+        to_delete.delete()
+    finally:
+        return redirect(to=ai_page)

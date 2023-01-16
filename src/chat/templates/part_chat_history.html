@@ -2,13 +2,16 @@
 
     <div id="history">
 
-        {% for conversaction in history %}
+        {% for conversation in history %}
 
             <div style="background-color: #fbfcee; padding: 5px 15px; margin-bottom: 20px; ">
-                <p>{{ conversaction.created }} | {{ conversaction.model }} | accuracy {{ conversaction.accuracy }} | Prompt:</p>
-                <p>{{ conversaction.prompt|linebreaks }}</p>
+                <p>{{ conversation.created }} | {{ conversation.model }} | accuracy {{ conversation.accuracy }} | Prompt:</p>
+                <p>{{ conversation.prompt|linebreaks }}</p>
                 <hr>
-                <p><b>{{ conversaction.response|linebreaks }}</b></p>
+                <p><b>{{ conversation.response|linebreaks }}</b></p>
+                <p style="text-align: right; font-size: 0.8em;">
+                    <a href="{% url "delete" conversation.pk %}" style="color: gray;">Delete</a>
+                </p>
             </div>
 
         {% endfor %}

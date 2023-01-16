@@ -62,7 +62,16 @@
 
     {% endif %}
 
-
+    <table id="history">
+        <tr>
+            <td>
+                <p style="text-align: left;">History (last 10):</p>
+            </td>
+            <td>
+            <p style="text-align: right; width: 95%;"><a href="{% url "all_history" %}">All History</a></p>
+        </td>
+        </tr>
+    </table>
     {% include "part_chat_history.html" %}
 
 

@@ -13,7 +13,7 @@ load_dotenv(dotenv_path="config/.env")
 @load_openai_key
 def get_answer(prompt, model, temp):
     if model == getenv("DAVINCI3"):
-        max_tokens = 4000
+        max_tokens = 3500
     elif model == getenv("DAVINCI2"):
         max_tokens = 8000
     else:
