@@ -139,6 +139,14 @@ a:hover {
   overflow-y: scroll; /* add scrollbars if necessary */
 }
 
+#history {
+  text-align: left;
+  margin: 20px auto;
+  width: 90%;
+  padding: 10px;
+  overflow-y: scroll; /* add scrollbars if necessary */
+}
+
 .image {
   margin: 20px auto;
   width: 80%; /* 75% of the width of the containing element */

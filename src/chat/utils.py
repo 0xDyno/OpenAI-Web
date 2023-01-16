@@ -4,6 +4,7 @@ import openai as ai
 from dotenv import load_dotenv
 
 from main.utils import load_openai_key
+from .models import Conversation
 
 
 load_dotenv(dotenv_path="config/.env")
@@ -37,4 +38,3 @@ def convert_temp(temp):
     if temp < 0:
         temp = 0
     return temp / 100
-    

@@ -12,8 +12,14 @@ from .models import Conversation
 DEF_INITIAL_CHAT = {"model": forms.ChatGPTForm.MODELS[0], "accuracy": 100}
 
 
-@login_required()
+@login_required
 def ai_page(request):
+    context = {}
+    history = list(Conversation.objects.filter(user=request.user))
+    if history:
+        history.reverse()
+        context["history"] = history
+    
     if request.method == "POST":
         form = forms.ChatGPTForm(request.POST)
         
@@ -27,19 +33,20 @@ def ai_page(request):
             
             key = Settings.objects.get(user=request.user).openai_key
             response = utils.get_answer(key, prompt, model, temperature)
-            context = {"form": form,
+            data = {"form": form,
                        "response": response,
                        "prompt": prompt,
                        "model": model,
                        "accuracy": temperature,
                        }
+            context.update(data)
             
             conversation = Conversation(user=request.user, prompt=prompt, response=response,
-                         model=model, accuracy=utils.convert_temp(temperature))
+                         model=model, accuracy=temperature)
             conversation.save()
             
             return render(request=request, template_name="chat_ai.html", context=context)
     
     form = forms.ChatGPTForm(initial=DEF_INITIAL_CHAT)
-    context = {"form": form}
+    context["form"] = form
     return render(request=request, template_name="chat_ai.html", context=context)

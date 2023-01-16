@@ -1,0 +1,18 @@
+{% if history %}
+
+    <div id="history">
+
+        {% for conversaction in history %}
+
+            <div style="background-color: #fbfcee; padding: 5px 15px; margin-bottom: 20px; ">
+                <p>{{ conversaction.created }} | {{ conversaction.model }} | accuracy {{ conversaction.accuracy }} | Prompt:</p>
+                <p>{{ conversaction.prompt|linebreaks }}</p>
+                <hr>
+                <p><b>{{ conversaction.response|linebreaks }}</b></p>
+            </div>
+
+        {% endfor %}
+
+    </div>
+
+{% endif %}
