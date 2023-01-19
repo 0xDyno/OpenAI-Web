@@ -24,7 +24,7 @@ def signup_page(request):
             username = form.cleaned_data.get("username")
             messages.success(request, f"Hey {username}, your profile was successfully created! Log in here:")
             
-            return settings_page(request)
+            return home(request)
         else:
             messages.error(request, form.error_messages)
     

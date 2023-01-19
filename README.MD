@@ -24,7 +24,8 @@ I suppose you're familiar with Python...
    - python3 manage.py makemigrations
    - python3 manage.py migrate
 4. Start the server "python3 manage.py runserver"
-5. Enjoy - http://127.0.0.1:8000/
+5. Sign up, bind OpenAI API
+6. Enjoy - http://127.0.0.1:8000/
 
 ## Current functionality:
 

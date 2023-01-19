@@ -3,6 +3,7 @@
 test.py
 *.env
 src/image_gen/static/images
+staticfiles/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
