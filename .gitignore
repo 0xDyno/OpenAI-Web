@@ -2,7 +2,7 @@
 /.idea
 test.py
 *.env
-src/image_gen/static/images
+src/web/static/images
 staticfiles/
 
 # Byte-compiled / optimized / DLL files

@@ -8,13 +8,13 @@ I suppose you're familiar with Python...
 
 ### Part 1 - grab the code
 1. Clone repository
-2. Create venv & install requirements
+2. Delete imgs folder
+3. Create venv & install requirements
 
 
 ### Part 2 - set up keys
-1. Copy .env.example, change name to .env
-2. Add your OpenAI API key to OPENAI_SECRET_KEY, don't use spaces
-3. Change DJANGO_SECRET_KEY to whatever you want, that's not too important while we run it locally
+1. In the src/config make copy .env.example and change filename to .env
+2. Change DJANGO_SECRET_KEY to whatever you want, that's not too important while we run it locally
 
 
 ### Part 3 - run server
@@ -30,10 +30,10 @@ I suppose you're familiar with Python...
 ## Current functionality:
 
 ### Main page
-![Main page](src/static/imgs/main_page.png "Main page")
+![Main page](imgs/main_page.png "Main page")
 
 ### Chat AIs
-![Chat AIs](src/static/imgs/chat.png "Chat AIs")
+![Chat AIs](imgs/chat.png "Chat AIs")
 
 ### Dall-E (image generating model)
-![Dalle](src/static/imgs/generate.png "Dalle")
+![Dalle](imgs/generate.png "Dalle")
