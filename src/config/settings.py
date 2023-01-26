@@ -39,10 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     
-    "main.apps.MainConfig",
-    "chat.apps.ChatConfig",
-    "image_gen.apps.ImageGenConfig",
-    
+    "web.apps.WebConfig",
     "django_extensions",
 ]
 
@@ -61,11 +58,7 @@ ROOT_URLCONF = "config.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / "templates",
-                 "main/templates",
-                 "chat/templates",
-                 "image_gen/templates",
-                 ],
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -127,9 +120,7 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-    BASE_DIR / "static/",
-    "main",
-    "image_gen/"
+    BASE_DIR / "web/",
 ]
 
 # Default primary key field type
