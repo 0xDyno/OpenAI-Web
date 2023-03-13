@@ -35,7 +35,7 @@ def get_answer(prompt, model, temp):
     if model == getenv("DAVINCI3"):
         max_tokens = 3500
     elif model == getenv("DAVINCI2"):
-        max_tokens = 8000
+        max_tokens = 3000
     else:
         max_tokens = 2000
     

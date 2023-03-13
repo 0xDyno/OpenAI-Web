@@ -75,8 +75,6 @@ def chat_ai_view(request):
     if request.method == "POST":
         form = ChatGPTForm(request.POST)
         
-        print(f"\n\n\n{form.data} {form.is_valid()}\n\n\n")
-        
         if form.is_valid():
             prompt = form.cleaned_data["prompt"]
             model = form.cleaned_data["model"]

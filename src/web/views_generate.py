@@ -20,7 +20,6 @@ def ai_page(request):
     
     if request.method == "POST":
         form = forms.DalleForm(request.POST)
-        print(f"\n\n\n{form.data} {form.is_valid()}\n\n\n")
         
         if form.is_valid():
             prompt = form.cleaned_data["prompt"]
