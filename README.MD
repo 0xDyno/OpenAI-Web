@@ -1,3 +1,5 @@
+You can check on - http://65.109.169.213:6169/
+
 # OpenAI & Django
 This is my first Django project, and I'm excited to learn how to make OpenAI and Django work together!
 
