@@ -1,16 +1,23 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
+from django.shortcuts import get_object_or_404
 from django.shortcuts import HttpResponseRedirect
 from django.shortcuts import render
+from django.urls import reverse
 
 from .forms import ChatGPTForm
+from .forms import TextGPTForm
 from .forms import SettingsFrom
-from .models import Conversation
+from .models import ChatModel
+from .models import Message
+from .models import TextModel
 from .models import Settings
-from .utils import get_answer
+from .utils import chat_handler
+from .utils import get_text_answer
+from .utils import get_model_index_in_form
 
-DEF_INITIAL_CHAT = {"model": ChatGPTForm.MODELS[0], "accuracy": 100}
+DEF_INITIAL_CHAT = {"model": TextGPTForm.MODELS[0]}
 
 
 def home(request):
@@ -67,13 +74,93 @@ def settings_page(request):
 @login_required
 def chat_ai_view(request):
     context = {}
-    history = list(Conversation.objects.filter(user=request.user))[-5:]
+    chats = list(ChatModel.objects.filter(user=request.user))
+    if chats:
+        context["chats"] = chats
+    
+    if request.method == "GET":
+        form = ChatGPTForm()
+        
+    elif request.method == "POST":
+        form = ChatGPTForm(request.POST)
+    
+        if form.is_valid():
+            prompt = form.cleaned_data["prompt"]
+            model = form.cleaned_data["model"]
+            chat = ChatModel(user=request.user, name=prompt[:20], alt_info=prompt[:150], model=model)
+            key = Settings.objects.get(user=request.user).openai_key
+            
+            res = chat_handler(prompt, chat, key)
+
+            if isinstance(res, str):
+                messages.error(request, message=res)
+            else:
+                return HttpResponseRedirect(reverse("chat_ai_conversation", kwargs={"chat_id": chat.id}))
+            
+        
+    context["form"] = form
+    return render(request=request, template_name="chat/chat_ai.html", context=context)
+
+
+@login_required
+def chat_ai_conversation_view(request, chat_id: int):
+    context = {}
+    chats = list(ChatModel.objects.filter(user=request.user))
+    if chats:
+        context["chats"] = chats
+    
+    chat = get_object_or_404(ChatModel, id=chat_id)
+    
+    if request.user.id != chat.user.id:
+        messages.error(request, message="This is not your chat. Play nice and don't cheat.")
+        return HttpResponseRedirect(reverse("chat_ai"))
+    
+    conversation = Message.objects.filter(chat=chat).order_by("-pk")
+    context["conversation"] = conversation
+    
+    model_id = get_model_index_in_form(chat.model)
+    
+    if request.method == "GET":
+        form = ChatGPTForm(initial={"model": ChatGPTForm.MODELS[model_id]})
+    elif request.method == "POST":
+        form = ChatGPTForm(request.POST)
+        if form.is_valid():
+            prompt = form.cleaned_data["prompt"]
+            key = Settings.objects.get(user=request.user).openai_key
+    
+            res = chat_handler(prompt, chat, key)
+
+            if isinstance(res, str):
+                messages.error(request, message=res)
+            else:
+                return HttpResponseRedirect(reverse("chat_ai_conversation", kwargs={"chat_id": chat.id}))
+
+    context["form"] = form
+    return render(request=request, template_name="chat/chat_ai.html", context=context)
+
+
+@login_required
+def delete_chat_view(request, chat_id):
+    chat = get_object_or_404(ChatModel, pk=chat_id)
+
+    if request.user.id != chat.user.id:
+        messages.error(request, message="This is not your chat. Play nice and don't cheat.")
+        return HttpResponseRedirect(reverse("chat_ai"))
+    
+    chat.delete()
+    return HttpResponseRedirect(reverse("chat_ai"))
+
+
+@login_required
+def text_ai_view(request):
+    context = {}
+    history = list(TextModel.objects.filter(user=request.user))[-5:]
     if history:
         history.reverse()
         context["history"] = history
     
     if request.method == "POST":
-        form = ChatGPTForm(request.POST)
+        form = TextGPTForm(request.POST)
         
         if form.is_valid():
             prompt = form.cleaned_data["prompt"]
@@ -81,7 +168,7 @@ def chat_ai_view(request):
             temperature = form.cleaned_data["accuracy"]
             
             key = Settings.objects.get(user=request.user).openai_key
-            response = get_answer(key, prompt, model, temperature)
+            response = get_text_answer(key, prompt, model, temperature)
             data = {"form": form,
                     "response": response,
                     "prompt": prompt,
@@ -90,21 +177,21 @@ def chat_ai_view(request):
                     }
             context.update(data)
             
-            conversation = Conversation(user=request.user, prompt=prompt, response=response,
-                                        model=model, accuracy=temperature)
+            conversation = TextModel(user=request.user, prompt=prompt, response=response,
+                                     model=model, accuracy=temperature)
             conversation.save()
             
-            return render(request=request, template_name="chat/chat_ai.html", context=context)
+            return render(request=request, template_name="chat/text_ai.html", context=context)
     
-    form = ChatGPTForm(initial=DEF_INITIAL_CHAT)
+    form = TextGPTForm(initial=DEF_INITIAL_CHAT)
     context["form"] = form
-    return render(request=request, template_name="chat/chat_ai.html", context=context)
+    return render(request=request, template_name="chat/text_ai.html", context=context)
 
 
 @login_required
 def chat_history_view(request):
     context = {}
-    history = list(Conversation.objects.filter(user=request.user))
+    history = list(TextModel.objects.filter(user=request.user))
     if history:
         history.reverse()
         context["history"] = history
@@ -115,9 +202,9 @@ def chat_history_view(request):
 
 
 @login_required
-def delete_chat_view(request, pk):
+def delete_conversation_view(request, pk):
     try:
-        to_delete = Conversation.objects.get(user=request.user, pk=pk)
+        to_delete = TextModel.objects.get(user=request.user, pk=pk)
         to_delete.delete()
     finally:
-        return HttpResponseRedirect(redirect_to="/chat/")
+        return HttpResponseRedirect(reverse("text_ai"))

@@ -1,5 +1,5 @@
 Django==4.1.5
-openai==0.26.03
+openai==0.27.2
 django-extensions==3.2.1
 Pillow==9.4.0
 python-dotenv==0.21.1

@@ -1,6 +1,9 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
 from django.shortcuts import render
+from django.urls import reverse
 
 from . import forms
 from . import utils
@@ -101,15 +104,11 @@ def download_page(request, url, prompt, size):
 
 @login_required
 def image_page(request, pk):
-    try:
-        image = GeneratedImageModel.objects.get(pk=pk)
-    except GeneratedImageModel.DoesNotExist:
-        context = {"message": "Error 404: Not found."}
-        return render(request=request, template_name="image_gen/image_page.html", context=context)
+    image = get_object_or_404(GeneratedImageModel, pk=pk)
     
     if image.user != request.user and not request.user.is_superuser:
-        message = "This is private picture, you don't have permissions to view it"
-        return render(request=request, template_name="image_gen/image_page.html", context={"message": message})
+        messages.error(request, message="This is private picture, you don't have permissions to delete it")
+        return render(request=request, template_name="image_gen/image_page.html")
     
     context = {"image": image, "size": utils.get_resolution(image.resolution)}
     return render(request=request, template_name="image_gen/image_page.html", context=context)
@@ -117,15 +116,11 @@ def image_page(request, pk):
 
 @login_required
 def delete_image_page(request, pk):
-    try:
-        image = GeneratedImageModel.objects.get(pk=pk)
-    except GeneratedImageModel.DoesNotExist:
-        context = {"message": "Error 404: Not found."}
-        return render(request=request, template_name="image_gen/image_page.html", context=context)
+    image = get_object_or_404(GeneratedImageModel, pk=pk)
     
     if image.user != request.user and not request.user.is_superuser:
-        message = "This is private picture, you don't have permissions to delete it"
-        return render(request=request, template_name="image_gen/image_page.html", context={"message": message})
+        messages.error(request, message="This is private picture, you don't have permissions to delete it")
+        return render(request=request, template_name="image_gen/image_page.html")
     
     image.delete()
-    return HttpResponseRedirect(redirect_to="/gallery/")
+    return HttpResponseRedirect(reverse("gallery"))

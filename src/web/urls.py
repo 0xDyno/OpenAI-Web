@@ -13,8 +13,11 @@ urlpatterns = [
     
     
     path(r"chat/", views.chat_ai_view, name="chat_ai"),
-    path(r"chat/history/", views.chat_history_view, name="chat_history"),
-    path(r"chat/delete/<int:pk>", views.delete_chat_view, name="delete_chat"),
+    path(r"chat/<int:chat_id>/", views.chat_ai_conversation_view, name="chat_ai_conversation"),
+    path(r"chat/delete/<int:chat_id>", views.delete_chat_view, name="delete_chat"),
+    path(r"text/", views.text_ai_view, name="text_ai"),
+    path(r"text/history/", views.chat_history_view, name="text_history"),
+    path(r"text/delete/<int:pk>", views.delete_conversation_view, name="delete_conversation"),
     
     
     path(r"image_generator/", views_generate.ai_page, name="ig_ai"),

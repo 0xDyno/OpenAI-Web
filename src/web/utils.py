@@ -7,7 +7,9 @@ import requests
 from django.core.files.base import ContentFile
 from dotenv import load_dotenv
 
+from .forms import ChatGPTForm
 from .models import GeneratedImageModel
+from .models import Message
 
 load_dotenv(dotenv_path="config/.env")
 
@@ -30,25 +32,88 @@ def load_openai_key(func):
 ###########
 
 
-@load_openai_key
-def get_answer(prompt, model, temp):
-    if model == getenv("DAVINCI3"):
-        max_tokens = 3500
-    elif model == getenv("DAVINCI2"):
-        max_tokens = 3000
-    else:
-        max_tokens = 2000
+def chat_handler(prompt, chat, key):
+    history = Message.objects.filter(chat=chat.pk)
+    messages = messages_collector(prompt, history)
     
+    result = get_chat_answer(key, messages, chat.model)
+    
+    if isinstance(result, str):
+        return result
+
+    answer = result["answer"]
+    usage = result.get("usage")
+
+    chat.last_usage = f"prompt = {usage['prompt_tokens']} tokens, " \
+                      f"completion = {usage['completion_tokens']} tokens, " \
+                      f"total = {usage.get('total_tokens')} tokens"
+    chat.save()
+    save_message(chat, "user", prompt)
+    save_message(chat, "assistant", answer)
+
+
+def messages_collector(prompt, history):
+    messages = []
+    
+    if history:
+        for message in history:
+            messages.append({"role": message.role, "content": message.text})
+        
+    messages.append({"role": "user", "content": prompt})
+    
+    return messages
+
+
+def save_message(chat, role, text):
+    message = Message(chat=chat, role=role, text=text)
+    message.save()
+
+
+@load_openai_key
+def get_chat_answer(messages, model):
     try:
-        response = ai.Completion.create(model=model, prompt=prompt,
-                                        temperature=convert_temp(temp), max_tokens=max_tokens)
+        response = ai.ChatCompletion.create(messages=messages, model=model)
+        print(f"== {response}")
+        return {"answer": response.choices[0].message.content, "usage": response.get("usage")}
+    except ai.OpenAIError as error:
+        return error_handler(error)
+
+
+@load_openai_key
+def get_text_answer(prompt, model, temp):
+    try:
+        if "edit" in model:
+            response = ai.Edit.create(model=model, input=prompt, instruction="Fix the spelling mistakes")
+        else:
+            response = ai.Completion.create(model=model, prompt=prompt, temperature=convert_temp(temp),
+                                        max_tokens=get_max_tokens(model))
         return response.choices[0].text
-    except (ai.InvalidRequestError, ai.error.RateLimitError) as error:
+    except ai.OpenAIError as error:
+        return error_handler(error)
+
+
+def error_handler(error):
+    if isinstance(error, (ai.InvalidRequestError, ai.error.RateLimitError)):
         return f"Error: {error.error['message']}"
-    except ai.error.AuthenticationError as error:
+    elif isinstance(error, ai.error.AuthenticationError):
         return f"Error: {error.error['message']}" + "\n\nYou can setup your keys in your Profile's settings"
-    except ai.OpenAIError:
-        return "Sorry, unknown error happened. Try again later or contact support."
+    else:
+        return "Error: Unknown. Try again later or contact support."
+
+
+def get_max_tokens(model):
+    if model == getenv("DAVINCI3"):
+        return 3500
+    elif model == getenv("DAVINCI2"):
+        return 8000
+    elif model == getenv("GPT3"):
+        return 4000
+    elif model == getenv("GPT4"):
+        return 8000
+    elif model == getenv("GPT4-32"):
+        return 32000
+    else:
+        return 2000
 
 
 def convert_temp(temp):
@@ -58,6 +123,13 @@ def convert_temp(temp):
     if temp < 0:
         temp = 0
     return temp / 100
+
+
+def get_model_index_in_form(model) -> int:
+    for index, obj in enumerate(ChatGPTForm.MODELS):
+        if model == obj[0]:
+            return index
+    return 0
 
 
 ############

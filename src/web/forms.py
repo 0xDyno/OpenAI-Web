@@ -5,13 +5,14 @@ class SettingsFrom(forms.Form):
     openai_key = forms.CharField(max_length=100, label="OpenAI Key", required=False)
 
 
-class ChatGPTForm(forms.Form):
+class TextGPTForm(forms.Form):
     MODELS = [
-        ("text-davinci-003", "text-davinci-003"),
-        ("code-davinci-002", "code-davinci-002"),
-        ("text-curie-001", "text-curie-001"),
-        ("text-babbage-001", "text-babbage-001"),
-        ("text-ada-001", "text-ada-001"),
+        ("text-davinci-003", "Davinci 3"),
+        ("text-davinci-edit-001", "Edit"),
+        ("code-davinci-002", "Davinci 2"),
+        ("text-curie-001", "Curie"),
+        ("text-babbage-001", "Babbage"),
+        ("text-ada-001", "Ada"),
     ]
     
     model = forms.ChoiceField(choices=MODELS, label=False,
@@ -21,7 +22,22 @@ class ChatGPTForm(forms.Form):
                                   widget=forms.NumberInput(attrs={"type": "range"}))
     
     prompt_attrs = {"placeholder": "Enter your request here", "cols": "10", "rows": "10"}
-    prompt = forms.CharField(max_length=4000, label=False,
+    prompt = forms.CharField(max_length=8000, label=False,
+                             widget=forms.Textarea(prompt_attrs))
+
+
+class ChatGPTForm(forms.Form):
+    MODELS = [
+        ("gpt-4-32k", "gpt-4-32k"),
+        ("gpt-4", "gpt-4"),
+        ("gpt-3.5-turbo", "gpt-3.5-turbo"),
+    ]
+    
+    model = forms.ChoiceField(choices=MODELS, label=False, widget=forms.RadioSelect(attrs={"class": "default-indent"}))
+    
+    prompt_attrs = {"placeholder": "Start chatting...", "cols": "10", "rows": "10",
+                    "style": "text-align:left; padding:20px;"}
+    prompt = forms.CharField(max_length=100000, label=False,
                              widget=forms.Textarea(prompt_attrs))
 
 

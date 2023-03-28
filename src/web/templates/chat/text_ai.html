@@ -1,53 +1,31 @@
-{% extends "patterns/main.html" %}
+{% extends "main.html" %}
 
 {% block content %}
     <br>
-    <table class="models" id="aiTable">
-        <tr>
-            <td style="text-align: left; padding-bottom: 30px; width: 100px;">AI</td>
-            <td class="title">GPT-4</td>
-            <td class="title">GPT-4 32k</td>
-            <td class="title">GPT 3.5 turbo</td>
-            <td class="title">Davinci 03</td>
-            <td class="title">Davinci 02</td>
-        </tr>
-        <tr>
-            <td style="text-align: left; width: 100px;">Description</td>
-            <td class="model">Approve required</td>
-            <td class="model">Approve required</td>
-            <td class="model">Fast, cheap, good</td>
-            <td class="model">Old 175b params</td>
-            <td class="model">Natural language to code</td>
-        </tr>
-        <tr>
-            <td style="text-align: left; width: 100px;">Price</td>
-            <td class="model">$0.03 / $0.06 for 1k</td>
-            <td class="model">$0.06 / $0.12 for 1k</td>
-            <td class="model">$0.002 / 1k</td>
-            <td class="model">$0.02 / 1k</td>
-            <td class="model">Free in Beta</td>
-        </tr>
-        <tr>
-            <td style="text-align: left; width: 100px;">Tech</td>
-            <td class="model">Text, 4000 symbols</td>
-            <td class="model">Text, 16000 symbols</td>
-            <td class="model">Text, 2000 symbols</td>
-            <td class="model">Text, 2000 symbols</td>
-            <td class="model">Code, 1500 symbols</td>
-        </tr>
-    </table>
-    <br>
+    <form action="{% url "text_ai" %}#aiTable" method="post" id="interact_form">
+        <table class="models" id="aiTable">
+            <tr>
+                <td style="text-align: left; padding-bottom: 30px; width: auto;">AI</td>
+                <td class="model-choice">{{ form.model.0 }}</td>
+                <td class="model-choice">{{ form.model.1 }}</td>
+                <td class="model-choice">{{ form.model.2 }}</td>
+                <td class="model-choice">{{ form.model.3 }}</td>
+                <td class="model-choice">{{ form.model.4 }}</td>
+                <td class="model-choice">{{ form.model.5 }}</td>
+            </tr>
+            <tr>
+                <td style="text-align: left; width: 100px;">Description</td>
+                <td class="model">The smartest here. Complex, humanized</td>
+                <td class="model">Correct grammar, mistakes</td>
+                <td class="model">Generates code. <span style="color: #740c0f;">Access required.</span></td>
+                <td class="model">A bit worse than Davinci but faster</td>
+                <td class="model">A bit better, than Ada, but still fast</td>
+                <td class="model">The Fastest - Weak. Parsing text, address correction</td>
+            </tr>
+        </table>
+        <br>
 
-    <form action="{% url "chat_ai" %}#aiTable" method="post" id="interact_form">
         {% csrf_token %}
-
-        {# I was searching for this *** decision for *** 3 days using tons of *** code on Google and ChatGPT AI #}
-        <div class="default-padding">
-            {% for model in form.model %}
-                {{ model }}
-            {% endfor %}
-        </div>
-
         <div class="default-padding">
             <span style="position: relative; top: -3px;">Accurate</span>
             {{ form.accuracy }}
@@ -76,8 +54,8 @@
                 <p style="text-align: left;">History (last 10):</p>
             </td>
             <td>
-            <p style="text-align: right; width: 95%;"><a href="{% url "chat_history" %}">All History</a></p>
-        </td>
+                <p style="text-align: right; width: 95%;"><a href="{% url "text_history" %}">All History</a></p>
+            </td>
         </tr>
     </table>
     {% include "chat/part_chat_history.html" %}

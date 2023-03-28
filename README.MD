@@ -34,8 +34,11 @@ I suppose you're familiar with Python...
 ### Main page
 ![Main page](imgs/main_page.png "Main page")
 
-### Chat AIs
+### Chat AIs (GPT3 & GPT4)
 ![Chat AIs](imgs/chat.png "Chat AIs")
 
-### Dall-E (image generating model)
+### Text AIs
+![Chat AIs](imgs/text.png "Chat AIs")
+
+### Dall-E (image generating model, old image)
 ![Dalle](imgs/generate.png "Dalle")
