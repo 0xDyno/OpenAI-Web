@@ -10,10 +10,10 @@
     <table class="navigation">
       <tr>
         <td>
-          <a href="{% url "chat" %}">Chat AIs</a>
+          <a href="{% url "chat_ai" %}">Chat AIs</a>
         </td>
         <td>
-          <a href="{% url "image_generator" %}">DALL-E</a>
+          <a href="{% url "ig_ai" %}">DALL-E</a>
         </td>
         <td>
           <a href="{% url "gallery" %}">Gallery</a>
@@ -28,7 +28,7 @@
             <a href="{% url "profile" %}" style="position: relative; top: -1px;">Settings</a>
 
             <a href="{% url "signout" %}">
-              <img class="signout" src="{% static "images/signout.png" %}" alt="signout img">
+              <img class="signout" src="{% static "images_default/signout.png" %}" alt="signout img">
             </a>
 
           {% endif %}
