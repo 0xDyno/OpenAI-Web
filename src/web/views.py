@@ -79,7 +79,7 @@ def chat_ai_view(request):
         context["chats"] = chats
     
     if request.method == "GET":
-        form = ChatGPTForm()
+        form = ChatGPTForm(initial={"model": ChatGPTForm.MODELS[2]})
         
     elif request.method == "POST":
         form = ChatGPTForm(request.POST)
