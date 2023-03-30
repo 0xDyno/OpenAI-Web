@@ -38,7 +38,34 @@ table {
 }
 
 table.navigation {
-    margin: auto
+    margin: auto;
+}
+
+table.navigation a:hover {
+    color: #ff0000;
+}
+
+table.inner_navigation_bar {
+    text-decoration: none;
+    margin: auto;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+table.inner_navigation_bar a {
+    display: table-cell;
+    vertical-align: middle;
+    color: #333;
+    text-decoration: none;
+    margin: 0 10px;
+    font-size: 16px;
+    font-weight: bold;
+    padding-inline: 30px;
+}
+
+table.inner_navigation_bar a:hover {
+    color: #000;
+    text-decoration: underline;
 }
 
 table.navigation td {

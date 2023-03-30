@@ -1,6 +1,7 @@
 {% extends "main.html" %}
 
 {% block content %}
+    {% include "image_gen/inner_nav_bar.html" %}
     <form action="{% url "ig_ai" %}" method="post" id="generateForm">
         {% csrf_token %}
         <table class="generate">

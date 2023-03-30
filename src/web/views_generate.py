@@ -88,7 +88,6 @@ def gallery_page(request):
     gallery = utils.get_saved_imgs(request.user)
     if gallery:
         context = {
-            "gallery_message": "Wow, you have wonderful collection!",
             "gallery": gallery,
         }
     else:
