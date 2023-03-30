@@ -122,4 +122,10 @@ def delete_image_page(request, pk):
         return render(request=request, template_name="image_gen/image_page.html")
     
     image.delete()
-    return HttpResponseRedirect(reverse("gallery"))
+
+    referer_url = request.META.get('HTTP_REFERER', None)
+    
+    if "image" in referer_url:
+        return HttpResponseRedirect(reverse("gallery"))
+    else:
+        return render(request=request, template_name="image_gen/delete.html")
