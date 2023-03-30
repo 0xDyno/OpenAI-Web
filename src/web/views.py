@@ -74,7 +74,7 @@ def settings_page(request):
 @login_required
 def chat_ai_view(request):
     context = {}
-    chats = list(ChatModel.objects.filter(user=request.user))
+    chats = list(ChatModel.objects.filter(user=request.user).order_by("-pk"))
     if chats:
         context["chats"] = chats
     
@@ -105,7 +105,7 @@ def chat_ai_view(request):
 @login_required
 def chat_ai_conversation_view(request, chat_id: int):
     context = {}
-    chats = list(ChatModel.objects.filter(user=request.user))
+    chats = list(ChatModel.objects.filter(user=request.user).order_by("-pk"))
     if chats:
         context["chats"] = chats
     
