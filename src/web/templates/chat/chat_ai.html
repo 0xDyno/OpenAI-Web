@@ -3,105 +3,117 @@
 {% block content %}
     <br>
     {% if chats %}
+        <div class="chat_container">
         <div class="chat_left_side">
 
             {% for chat in chats %}
                 {% load static %}
-                <div style="padding-bottom: 10px;">
-                    <a href="{% url "delete_chat" chat.pk %}" style="text-decoration: none;">
+                <div class="chat_name">
+                    <a href="{% url "delete_chat" chat.pk %}">
                         <img src="{% static "images_default/crossed.png" %}" alt="cross" width="12px" height="12px">
                     </a>
-                    <a href="{% url "chat_ai_conversation" chat.id %}" title="{{ chat.alt_info }}">{{ chat.name }}</a>
+                    <a href="{% url "chat_ai_conversation" chat.id %}" title="{{ chat.alt_info }}">
+                        {{ chat.name }}
+                    </a>
                 </div>
             {% endfor %}
 
         </div>
     {% endif %}
 
-    {% if chats %}
-        <div class="chat_right_side">
+{% if chats %}
+    <div class="chat_right_side">
+{% endif %}
+
+<table class="models" id="aiTable">
+    <tr>
+        <td style="text-align: left; padding-bottom: 30px; width: 100px;">AI</td>
+        <td class="title">GPT-4 32k</td>
+        <td class="title">GPT-4</td>
+        <td class="title">GPT 3.5 turbo</td>
+    </tr>
+    <tr>
+        <td style="text-align: left; width: 100px;">Price</td>
+        <td class="model_tokens">
+            $0.06 / $0.12 for 1k
+            <span class="tooltip">Prompt $0.06, Completion $0.12 for 1k tokens</span>
+        </td>
+        <td class="model_tokens">
+            $0.03 / $0.06 for 1k
+            <span class="tooltip">Prompt $0.03, Completion $0.06 for 1k tokens</span>
+        </td>
+        <td class="model_tokens">$0.002 for 1k</td>
+    </tr>
+    <tr>
+        <td style="text-align: left; width: 100px;">Tech</td>
+        <td class="model">32,678 tokens</td>
+        <td class="model">8,192 tokens</td>
+        <td class="model">4,096 tokens</td>
+    </tr>
+    <tr>
+        <td style="text-align: left; width: 100px;">Additional</td>
+        <td class="model"><span style="color: #740c0f;">Access required.</span></td>
+        <td class="model"><span style="color: #740c0f;">Access required.</span></td>
+        <td class="model">Fast, cheap, good</td>
+    </tr>
+</table>
+<br>
+
+<form action="" method="post" id="interact_form">
+    {% csrf_token %}
+
+    {% if conversation %}
+        <input type="hidden" name="{{ form.model.name }}" value="{{ form.model.value.0 }}">
+    {% else %}
+        <div class="default-padding">
+            {% for model in form.model %}
+                {{ model }}
+            {% endfor %}
+        </div>
     {% endif %}
 
-    <table class="models" id="aiTable">
-        <tr>
-            <td style="text-align: left; padding-bottom: 30px; width: 100px;">AI</td>
-            <td class="title">GPT-4 32k</td>
-            <td class="title">GPT-4</td>
-            <td class="title">GPT 3.5 turbo</td>
-        </tr>
-        <tr>
-            <td style="text-align: left; width: 100px;">Price</td>
-            <td class="model_tokens" title="Prompt $0.06, Completion $0.12 for 1k tokens">$0.06 / $0.12 for 1k</td>
-            <td class="model_tokens" title="Prompt $0.03, Completion $0.06 for 1k tokens">$0.03 / $0.06 for 1k</td>
-            <td class="model_tokens" title="Same price for Prompt & Completion">$0.002 / 1k</td>
-        </tr>
-        <tr>
-            <td style="text-align: left; width: 100px;">Tech</td>
-            <td class="model">32,678 tokens</td>
-            <td class="model">8,192 tokens</td>
-            <td class="model">4,096 tokens</td>
-        </tr>
-        <tr>
-            <td style="text-align: left; width: 100px;">Additional</td>
-            <td class="model"><span style="color: #740c0f;">Access required.</span></td>
-            <td class="model"><span style="color: #740c0f;">Access required.</span></td>
-            <td class="model">Fast, cheap, good</td>
-        </tr>
-    </table>
-    <br>
+    <div class="default-padding">
+        {{ form.prompt }}
+    </div>
 
-    <form action="" method="post" id="interact_form">
-        {% csrf_token %}
-
-        {% if conversation %}
-            <input type="hidden" name="{{ form.model.name }}" value="{{ form.model.value.0 }}">
-        {% else %}
-            <div class="default-padding">
-                {% for model in form.model %}
-                    {{ model }}
-                {% endfor %}
-            </div>
-        {% endif %}
-
-        <div class="default-padding">
-            {{ form.prompt }}
-        </div>
-
-        <input type="submit" class="main" name="submitButton" id="submitButton" value="Send">
-    </form>
+    <input type="submit" class="main" name="submitButton" id="submitButton" value="Send">
+</form>
 
 {% if chats %}
+    </div>
     </div>
 {% endif %}
 
     {% if conversation %}
         <div class="conversation_chat">
-            <div style="float: left;">
+            <div style="float: left;">      <!-- GPT model & Used Tokens -->
                 <p style="color: darkgray;">
                     {{ form.model.value.0 }} | {{ conversation.0.chat.last_usage }}
                 </p>
             </div>
-            <div style="float: right;">
+            <div style="float: right;">     <!-- Delete text -->
                 <p>
-                    <a href="{% url "delete_chat" conversation.0.chat.pk %}" style="color: gray; font-size: 0.8em;">Delete</a>
+                    <a href="{% url "delete_chat" conversation.0.chat.pk %}"
+                       style="color: gray; font-size: 0.8em;">Delete</a>
                 </p>
             </div>
-            <br><br><br>
+            <br>
+            <br>
+            <br>
 
 
-        {% for message in conversation %}
-            {% load static %}
-            {% if message.role == "user" %}
-                <div class="chat_user">
-            {% else %}
-                <div class="chat_ai">
-            {% endif %}
-        <pre>{{ message.created }}</pre>
-        <pre>{{ message.text }}</pre>
+            {% for message in conversation %}
+                {% load static %}
+                {% if message.role == "user" %}
+                    <div class="chat_user">
+                {% else %}
+                    <div class="chat_ai">
+                {% endif %}
+                        <pre>{{ message.created }}</pre>
+                        <pre>{{ message.text }}</pre>
+                    </div>
+            {% endfor %}
         </div>
-        {% endfor %}
-    </div>
-
     {% endif %}
 
     <script>
