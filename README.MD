@@ -41,4 +41,4 @@ I suppose you're familiar with Python...
 ![Chat AIs](imgs/text.png "Chat AIs")
 
 ### Dall-E (image generating model, old image)
-![Dalle](imgs/generate.png "Dalle")
+![Dalle](imgs/images.png "Dalle")

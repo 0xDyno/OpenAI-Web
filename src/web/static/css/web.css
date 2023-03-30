@@ -103,6 +103,10 @@ table.models td.model {
     padding: 5px;
 }
 
+table.models td.model_tokens:hover {
+    color: #746d00;
+}
+
 table.generate {
     width: 50%
 }
