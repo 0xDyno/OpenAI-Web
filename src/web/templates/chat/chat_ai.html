@@ -88,7 +88,14 @@
         <div class="conversation_chat">
             <div style="float: left;">      <!-- GPT model & Used Tokens -->
                 <p style="color: darkgray;">
-                    {{ form.model.value.0 }} | {{ conversation.0.chat.last_usage }}
+                    {{ form.model.value.0 }}<br>
+
+                    {% if conversation.0.chat.last_used %}
+                        Last used: {{ conversation.0.chat.last_used }}<br>
+                    {% endif %}
+                    {% if conversation.0.chat.total_used %}
+                        Total used: {{ conversation.0.chat.total_used }}<br>
+                    {% endif %}
                 </p>
             </div>
             <div style="float: right;">     <!-- Delete text -->
@@ -100,6 +107,12 @@
             <br>
             <br>
             <br>
+            {% if conversation.0.chat.total_used %}
+                <br>
+            {% endif %}
+            {% if conversation.0.chat.total_used %}
+                <br>
+            {% endif %}
 
 
             {% for message in conversation %}

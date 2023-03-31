@@ -38,7 +38,8 @@ class ChatModel(models.Model):
 
     name = models.CharField(max_length=50, blank=True)
     alt_info = models.CharField(max_length=150, blank=True)
-    last_usage = models.CharField(max_length=100, blank=True)
+    last_used = models.CharField(max_length=100, blank=True)
+    total_used = models.CharField(max_length=100, blank=True)
     model = models.CharField(max_length=50)
     created = models.DateTimeField(auto_now_add=True)
     

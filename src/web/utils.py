@@ -43,13 +43,36 @@ def chat_handler(prompt, chat, key):
 
     answer = result["answer"]
     usage = result.get("usage")
-
-    chat.last_usage = f"prompt = {usage['prompt_tokens']} tokens, " \
-                      f"completion = {usage['completion_tokens']} tokens, " \
-                      f"total = {usage.get('total_tokens')} tokens"
-    chat.save()
+    
+    update_token_used_info(chat, usage['prompt_tokens'], usage['completion_tokens'], usage.get('total_tokens'))
+    
     save_message(chat, "user", prompt)
     save_message(chat, "assistant", answer)
+
+
+def update_token_used_info(chat, prompt_used, completion_used, together_used):
+    used_tokens_now = token_used_format(prompt_used, completion_used, together_used)
+    
+    if not chat.last_used:
+        chat.last_used = used_tokens_now
+        chat.total_used = used_tokens_now
+    else:
+        chat.last_used = used_tokens_now
+        if chat.total_used:
+            last = get_tokens_used_from_text(chat.total_used)
+            chat.total_used = token_used_format(last[0] + prompt_used,
+                                                last[1] + completion_used,
+                                                last[2] + together_used)
+    chat.save()
+    
+
+def token_used_format(prompt, completion, together):
+    return f"prompt = {prompt} tokens, completion = {completion} tokens, together = {together} tokens"
+
+
+def get_tokens_used_from_text(text):
+    parts = text.split()
+    return [int(parts[2]), int(parts[6]), int(parts[10])]
 
 
 def messages_collector(prompt, history):
@@ -73,7 +96,6 @@ def save_message(chat, role, text):
 def get_chat_answer(messages, model):
     try:
         response = ai.ChatCompletion.create(messages=messages, model=model)
-        print(f"== {response}")
         return {"answer": response.choices[0].message.content, "usage": response.get("usage")}
     except ai.OpenAIError as error:
         return error_handler(error)
